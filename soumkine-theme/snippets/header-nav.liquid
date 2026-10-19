@@ -1,0 +1,35 @@
+{%- comment -%}
+  Inline desktop navigation. Items with sub-items open the side panel.
+  Accepts: menu (linklist)
+{%- endcomment -%}
+<nav class="header__nav" aria-label="{{ 'header.primary_navigation' | t }}">
+  <ul role="list">
+    {%- for link in menu.links -%}
+      <li>
+        {%- if link.links.size > 0 -%}
+          <button
+            class="header__nav-link link-hover"
+            type="button"
+            data-drawer-open="MenuDrawer"
+            data-panel="{{ link.handle }}"
+            aria-controls="MenuDrawer"
+            aria-expanded="false"
+          >
+            {{- link.title | escape -}}
+            {%- render 'icon', name: 'chevron-down' -%}
+          </button>
+        {%- else -%}
+          <a
+            class="header__nav-link link-hover"
+            href="{{ link.url }}"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{- link.title | escape -}}
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

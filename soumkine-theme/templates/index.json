@@ -1,0 +1,152 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-collage",
+      "blocks": {
+        "image_1": {
+          "type": "image",
+          "settings": {
+            "width": 20,
+            "x": 14,
+            "y": 4,
+            "layer": "back",
+            "parallax": 5
+          }
+        },
+        "image_2": {
+          "type": "image",
+          "settings": {
+            "width": 30,
+            "x": 70,
+            "y": 24,
+            "layer": "front",
+            "parallax": 9
+          }
+        },
+        "image_3": {
+          "type": "image",
+          "settings": {
+            "width": 34,
+            "x": 0,
+            "y": 44,
+            "layer": "back",
+            "parallax": -3
+          }
+        },
+        "image_4": {
+          "type": "image",
+          "settings": {
+            "width": 24,
+            "x": 50,
+            "y": 78,
+            "layer": "front",
+            "parallax": 6
+          }
+        }
+      },
+      "block_order": [
+        "image_1",
+        "image_2",
+        "image_3",
+        "image_4"
+      ],
+      "settings": {
+        "show_wordmark": true,
+        "show_signature": false,
+        "signature_position": "overlap",
+        "show_captions": false,
+        "fallback_image": "second"
+      }
+    },
+    "statement": {
+      "type": "statement",
+      "settings": {
+        "text": "<p>Original paintings on canvas, made in a small Paris atelier. I choose every colour, I lay the paint by hand, I direct every pass. The machine holds the brush.</p>",
+        "size": "medium",
+        "alignment": "center",
+        "inverse": false,
+        "spacing": "default"
+      }
+    },
+    "latest": {
+      "type": "featured-scatter",
+      "settings": {
+        "title": "Latest Works",
+        "title_position": "overlap",
+        "limit": 8,
+        "ratio": "natural",
+        "parallax": true,
+        "compact": false,
+        "view_all_label": "",
+        "spacing": "default"
+      }
+    },
+    "series": {
+      "type": "collection-slider",
+      "settings": {
+        "heading": "Chromatic Series",
+        "text": "<p>Horizons built line by line, in acrylic on canvas.</p>",
+        "limit": 8,
+        "ratio": "portrait",
+        "button_label": "View all",
+        "spacing": "default"
+      }
+    },
+    "video": {
+      "type": "video-feature",
+      "settings": {
+        "layout": "full",
+        "frame_width": 56,
+        "ratio_fallback": 1.5,
+        "height": "large",
+        "overlay": 20,
+        "content_position": "bottom",
+        "eyebrow": "Atelier, Paris",
+        "heading": "The machine holds the brush",
+        "button_label": "The process",
+        "button_link": "/pages/about"
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {
+        "text": "Painted in Paris. One of a kind.",
+        "style": "heading",
+        "speed": 45,
+        "inverse": false,
+        "spacing": "none"
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "heading": "The atelier",
+        "text": "<p>Founded in Paris, 2016. Soumkine started as handmade notebooks in a small atelier. Today: a painting machine, built and coded by hand, guided by hand.</p>",
+        "show_signature": true,
+        "button_label": "About",
+        "button_link": "/pages/about",
+        "spacing": "default",
+        "image_ratio": "landscape"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Letters from the atelier",
+        "text": "New works, first. Nothing else.",
+        "style": "surface",
+        "spacing": "default"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "statement",
+    "latest",
+    "series",
+    "video",
+    "marquee",
+    "story",
+    "newsletter"
+  ]
+}

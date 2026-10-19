@@ -1,0 +1,15 @@
+# Чужие референсы (демо-магазин Cascade и др.) — не публикуем.
+# Все PDF закрыты по умолчанию, открыты только снимки своего магазина.
+*.pdf
+!*SOUMKINE-actual.pdf
+*.webarchive
+
+# Архивы темы: собираются из soumkine-theme/, 0.4 лежит в релизе v0.4.0
+*.zip
+
+# Копии файлов, которые уже есть в soumkine-theme/
+soumkine-theme-*/
+fix-homepage/
+
+.DS_Store
+.claude/

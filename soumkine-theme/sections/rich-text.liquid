@@ -1,0 +1,75 @@
+<div class="section{% if section.settings.spacing == 'small' %} section--tight{% elsif section.settings.spacing == 'none' %} section--flush{% endif %}">
+  <div class="page-width page-layout{% if section.settings.layout == 'center' %} page-layout--center{% else %} page-layout--narrow{% endif %} reveal">
+    <div>
+      {%- if section.settings.heading != blank -%}
+        <h2 class="h1">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+    <div>
+      {%- if section.settings.text != blank -%}
+        <div class="rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <p style="margin-top: 28px;"><a class="button" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label | escape }}</a></p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "tag": "section",
+  "class": "section-rich-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "About"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Share a story, a process, a note on materials.</p>"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "split", "label": "Heading left, text right" },
+        { "value": "center", "label": "Centered" }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space above",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "default", "label": "Default" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text"
+    }
+  ]
+}
+{% endschema %}

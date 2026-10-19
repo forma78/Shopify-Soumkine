@@ -1,0 +1,28 @@
+<div class="page-width page-layout{% if section.settings.layout == 'center' %} page-layout--center{% else %} page-layout--narrow{% endif %}">
+  <div>
+    <h1 class="h1">{{ page.title | escape }}</h1>
+  </div>
+  <div class="rte reveal">
+    {{ page.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page",
+  "tag": "section",
+  "class": "section-main-page",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "split", "label": "Title left, text right" },
+        { "value": "center", "label": "Centered" }
+      ],
+      "default": "split"
+    }
+  ]
+}
+{% endschema %}

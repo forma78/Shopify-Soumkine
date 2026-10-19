@@ -1,0 +1,328 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Soumkine",
+    "theme_version": "0.4.0",
+    "theme_author": "Theo Sumkin",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "select",
+        "id": "wordmark_style",
+        "label": "Wordmark",
+        "options": [
+          { "value": "logo", "label": "SOUMKINE logo" },
+          { "value": "text", "label": "Text" }
+        ],
+        "default": "logo",
+        "info": "Shown in the header, the hero and the footer."
+      },
+      {
+        "type": "header",
+        "content": "Text wordmark"
+      },
+      {
+        "type": "text",
+        "id": "wordmark_text",
+        "label": "Text",
+        "default": "SOUMKINE",
+        "info": "Used when Wordmark is set to Text. Leave empty to use the store name."
+      },
+      {
+        "type": "select",
+        "id": "wordmark_font",
+        "label": "Large text typeface",
+        "options": [
+          { "value": "display", "label": "Condensed" },
+          { "value": "heading", "label": "Grotesk" },
+          { "value": "mono", "label": "Monospace" }
+        ],
+        "default": "display"
+      },
+      {
+        "type": "header",
+        "content": "Signature"
+      },
+      {
+        "type": "image_picker",
+        "id": "signature_image",
+        "label": "Signature image",
+        "info": "Transparent PNG or SVG. The Theo Sumkin signature from the logo is used when empty."
+      },
+      {
+        "type": "text",
+        "id": "signature_prefix",
+        "label": "Text before signature",
+        "default": "by",
+        "info": "With the SOUMKINE logo, the “by” from the logo is used instead."
+      },
+      {
+        "type": "text",
+        "id": "signature_alt",
+        "label": "Signature alt text",
+        "default": "Theo Sumkin"
+      },
+      {
+        "type": "header",
+        "content": "Favicon"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 × 32px recommended"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Secondary text",
+        "default": "#6f6f6f"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Panels",
+        "info": "Menu drawer, newsletter band, image placeholders.",
+        "default": "#f6f5f2"
+      },
+      {
+        "type": "color",
+        "id": "color_inverse_background",
+        "label": "Inverse background",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_inverse_text",
+        "label": "Inverse text",
+        "default": "#ffffff"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Text and navigation use Space Mono. Headings use Inter Tight. The large wordmark uses Antonio. All three are bundled with the theme."
+      },
+      {
+        "type": "range",
+        "id": "body_font_size",
+        "label": "Text size",
+        "min": 10,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "default": 12
+      },
+      {
+        "type": "checkbox",
+        "id": "body_uppercase",
+        "label": "Uppercase text",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "rte_uppercase",
+        "label": "Uppercase long-form text",
+        "info": "Page, article and product descriptions.",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "label": "Heading scale",
+        "min": 80,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_margin",
+        "label": "Page margin (desktop)",
+        "min": 16,
+        "max": 120,
+        "step": 4,
+        "unit": "px",
+        "default": 88
+      },
+      {
+        "type": "range",
+        "id": "image_radius",
+        "label": "Image corner radius",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Button style",
+        "options": [
+          { "value": "pill", "label": "Pill" },
+          { "value": "offset", "label": "Pill with offset outline" },
+          { "value": "square", "label": "Square" }
+        ],
+        "default": "pill"
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "card_show_secondary_image",
+        "label": "Show second image on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Sold works"
+      },
+      {
+        "type": "text",
+        "id": "sold_out_label",
+        "label": "Sold label",
+        "default": "Sold",
+        "info": "Shown with a red dot."
+      },
+      {
+        "type": "checkbox",
+        "id": "sold_hide_price",
+        "label": "Hide the price",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sold_grayscale",
+        "label": "Black and white image on product cards",
+        "info": "Hovering shows the second image in colour, or brings the colour back.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sold_grayscale_product",
+        "label": "Black and white first image on the product page",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Motion",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "motion_parallax",
+        "label": "Parallax on scattered images",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "motion_reveal",
+        "label": "Fade in on scroll",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Drawer" },
+          { "value": "page", "label": "Page" }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_note",
+        "label": "Enable order notes",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/soumkine"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      }
+    ]
+  },
+  {
+    "name": "Currency format",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency codes",
+        "default": false
+      }
+    ]
+  }
+]

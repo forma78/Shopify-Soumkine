@@ -1,0 +1,265 @@
+{%- comment -%}
+  Giant wordmark with images scattered around it. Positions are a percentage of the page width.
+  Image blocks without an image fall back to the products of the chosen collection.
+{%- endcomment -%}
+{%- liquid
+  assign fallback_collection = section.settings.collection
+  if fallback_collection == blank
+    assign fallback_collection = collections.all
+  endif
+  assign stage_height = 30
+-%}
+
+{%- capture items -%}
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign item_image = block.settings.image
+      assign item_link = block.settings.link
+      assign item_title = nil
+      assign item_product = block.settings.product
+
+      if item_product == blank and item_image == blank
+        assign item_product = fallback_collection.products[forloop.index0]
+      endif
+
+      if item_product != blank
+        assign item_title = item_product.title
+        if item_link == blank
+          assign item_link = item_product.url
+        endif
+        if item_image == blank
+          assign item_image = item_product.featured_media.preview_image
+          if section.settings.fallback_image == 'second' and item_product.media.size > 1
+            assign item_image = item_product.media[1].preview_image
+          endif
+        endif
+      endif
+
+      assign item_ratio = 0.75
+      if item_image
+        assign item_ratio = item_image.aspect_ratio
+      endif
+      assign item_height = block.settings.width | times: 1.0 | divided_by: item_ratio
+      assign item_bottom = block.settings.y | plus: item_height
+      if item_bottom > stage_height
+        assign stage_height = item_bottom
+      endif
+      assign item_speed = block.settings.parallax | times: 0.01
+      assign item_sizes = block.settings.width | append: 'vw'
+      assign placeholder_number = forloop.index0 | modulo: 6 | plus: 1
+      assign placeholder_name = 'product-' | append: placeholder_number
+    -%}
+    <div
+      class="hero-collage__item hero-collage__item--{{ block.settings.layer }}"
+      style="--x: {{ block.settings.x }}cqw; --y: {{ block.settings.y }}cqw; --w: {{ block.settings.width }}cqw;"
+      {{ block.shopify_attributes }}
+    >
+      <div{% if item_speed != 0 %} data-parallax="{{ item_speed }}"{% endif %}>
+        {%- if item_link != blank -%}<a href="{{ item_link }}" class="card">{%- endif -%}
+        <div class="media media--ratio" style="--ratio: {{ item_ratio }};">
+          {%- if item_image -%}
+            {%- assign item_alt = item_image.alt | default: item_title | escape -%}
+            {%- if forloop.index < 3 -%}
+              {%- assign item_loading = 'eager' -%}
+            {%- else -%}
+              {%- assign item_loading = 'lazy' -%}
+            {%- endif -%}
+            {{
+              item_image
+              | image_url: width: 2000
+              | image_tag:
+                loading: item_loading,
+                widths: '400, 600, 800, 1000, 1400, 2000',
+                sizes: item_sizes,
+                alt: item_alt
+            }}
+          {%- else -%}
+            {{ placeholder_name | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+        {%- if section.settings.show_captions and item_title != blank -%}
+          <div class="hero-collage__caption">{{ item_title | escape }}</div>
+        {%- endif -%}
+        {%- if item_link != blank -%}</a>{%- endif -%}
+      </div>
+    </div>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- assign stage_height = stage_height | plus: 4 | round: 2 -%}
+<div class="hero-collage">
+  <div class="hero-collage__inner" style="--stage-height: {{ stage_height }}cqw;">
+    {%- if section.settings.show_wordmark -%}
+      {%- render 'wordmark-lockup',
+        tag: 'h1',
+        show_signature: section.settings.show_signature,
+        signature_position: section.settings.signature_position,
+        class: 'hero-collage__wordmark'
+      -%}
+    {%- endif -%}
+    <div class="hero-collage__stage">
+      {{ items }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero collage",
+  "tag": "section",
+  "class": "section-hero-collage",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_wordmark",
+      "label": "Show wordmark",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_signature",
+      "label": "Show signature",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "signature_position",
+      "label": "Signature position",
+      "options": [
+        { "value": "overlap", "label": "Over the wordmark" },
+        { "value": "under", "label": "Under the wordmark" },
+        { "value": "stacked", "label": "Centered, as the logo" }
+      ],
+      "default": "overlap"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_captions",
+      "label": "Show product titles under images",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Automatic images"
+    },
+    {
+      "type": "paragraph",
+      "content": "Image blocks left empty use products from this collection, in order."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "All products when empty."
+    },
+    {
+      "type": "select",
+      "id": "fallback_image",
+      "label": "Product image",
+      "options": [
+        { "value": "first", "label": "Main image" },
+        { "value": "second", "label": "Second image" }
+      ],
+      "default": "second"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Links the image to a product. Its image is used when no image is selected."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Width",
+          "min": 10,
+          "max": 70,
+          "step": 1,
+          "unit": "%",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "Horizontal position",
+          "min": 0,
+          "max": 90,
+          "step": 1,
+          "unit": "%",
+          "default": 10
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Vertical position",
+          "min": 0,
+          "max": 150,
+          "step": 2,
+          "unit": "%",
+          "info": "Percentage of the page width, from the top of the section.",
+          "default": 10
+        },
+        {
+          "type": "select",
+          "id": "layer",
+          "label": "Layer",
+          "options": [
+            { "value": "front", "label": "In front of wordmark" },
+            { "value": "back", "label": "Behind wordmark" }
+          ],
+          "default": "front"
+        },
+        {
+          "type": "range",
+          "id": "parallax",
+          "label": "Parallax",
+          "min": -10,
+          "max": 10,
+          "step": 1,
+          "default": 4
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero collage",
+      "blocks": [
+        {
+          "type": "image",
+          "settings": {"width": 20, "x": 14, "y": 4, "layer": "back", "parallax": 5}
+        },
+        {
+          "type": "image",
+          "settings": {"width": 30, "x": 70, "y": 24, "layer": "front", "parallax": 9}
+        },
+        {
+          "type": "image",
+          "settings": {"width": 34, "x": 0, "y": 44, "layer": "back", "parallax": -3}
+        },
+        {
+          "type": "image",
+          "settings": {"width": 24, "x": 50, "y": 78, "layer": "front", "parallax": 6}
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

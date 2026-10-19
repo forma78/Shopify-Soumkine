@@ -1,0 +1,63 @@
+{%- comment -%}
+  Line icons, 1.2px stroke.
+  Usage: {% render 'icon', name: 'close', class: 'icon--large' %}
+{%- endcomment -%}
+{%- capture classes -%}icon icon--{{ name }}{% if class %} {{ class }}{% endif %}{%- endcapture -%}
+{%- case name -%}
+  {%- when 'close' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 3l14 14M17 3L3 17"/></svg>
+  {%- when 'chevron-down' -%}
+    <svg class="{{ classes }}" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M1.5 4l4.5 4.5L10.5 4"/></svg>
+  {%- when 'arrow-left' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M18 10H2.5M8.5 4l-6 6 6 6"/></svg>
+  {%- when 'arrow-right' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M2 10h15.5M11.5 4l6 6-6 6"/></svg>
+  {%- when 'arrow-up-right' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 15L15 5M7 5h8v8"/></svg>
+  {%- when 'search' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="8.5" cy="8.5" r="6"/><path d="M13 13l5 5"/></svg>
+  {%- when 'plus' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 3v14M3 10h14"/></svg>
+  {%- when 'minus' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h14"/></svg>
+  {%- when 'filter' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M2 6h16M2 14h16"/><circle cx="7" cy="6" r="2" fill="var(--color-bg)"/><circle cx="13" cy="14" r="2" fill="var(--color-bg)"/></svg>
+  {%- when 'globe' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c2.5 2.6 3.6 5.2 3.6 8s-1.1 5.4-3.6 8c-2.5-2.6-3.6-5.2-3.6-8S7.5 4.6 10 2z"/></svg>
+  {%- when 'heart' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 17s-7-4.4-7-9.2A3.8 3.8 0 0 1 10 5.6a3.8 3.8 0 0 1 7 2.2C17 12.6 10 17 10 17z"/></svg>
+  {%- when 'pin' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 18s6-5.6 6-10.2A6 6 0 0 0 4 7.8C4 12.4 10 18 10 18z"/><circle cx="10" cy="8" r="2.2"/></svg>
+  {%- when 'brush' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M18 2L9.5 10.5M8.2 11.8c-1.6-1.6-4.2-.6-4.2 1.7 0 1.8-.8 2.9-2 3.5 3.2 1.2 7.6.4 7.6-3.2 0-.8-.5-1.5-1.4-2z"/></svg>
+  {%- when 'frame' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="2.5" y="2.5" width="15" height="15"/><rect x="6" y="6" width="8" height="8"/></svg>
+  {%- when 'certificate' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M4 2.5h12v15H4zM7 6.5h6M7 9.5h6M7 12.5h3"/></svg>
+  {%- when 'truck' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M1.5 5h11v8h-11zM12.5 8h3.5l2.5 2.8V13h-6"/><circle cx="5" cy="14.5" r="1.6" fill="var(--color-bg)"/><circle cx="15" cy="14.5" r="1.6" fill="var(--color-bg)"/></svg>
+  {%- when 'return' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M4 8h9a4.5 4.5 0 0 1 0 9H8M7.5 4.5L4 8l3.5 3.5"/></svg>
+  {%- when 'ruler' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M2 13.5L13.5 2 18 6.5 6.5 18zM5.5 10l1.8 1.8M8 7.5l1.8 1.8M10.5 5l1.8 1.8"/></svg>
+  {%- when 'question' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8"/><path d="M7.8 7.6a2.3 2.3 0 1 1 3.2 2.1c-.6.3-1 .8-1 1.5v.6M10 14.2v.3"/></svg>
+  {%- when 'play' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 4l10 6-10 6z"/></svg>
+  {%- when 'pause' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M7 4v12M13 4v12"/></svg>
+  {%- when 'instagram' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="2.5" y="2.5" width="15" height="15" rx="4"/><circle cx="10" cy="10" r="3.4"/><circle cx="14.6" cy="5.4" r=".4"/></svg>
+  {%- when 'tiktok' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M11.5 2.5v10.2a3 3 0 1 1-3-3M11.5 2.5c.4 2.4 1.9 3.8 4.5 4"/></svg>
+  {%- when 'pinterest' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8"/><path d="M9 7.5l-2.5 10M8.6 9.4c-.9 3.4 4.9 3.3 5.1-.9.2-3.4-5.4-3.9-6.6-1"/></svg>
+  {%- when 'youtube' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1.5" y="4" width="17" height="12" rx="3.5"/><path d="M8.3 7.4l4.4 2.6-4.4 2.6z"/></svg>
+  {%- when 'facebook' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M11.2 18V10.5h2.5l.4-2.9h-2.9V5.8c0-.8.3-1.4 1.5-1.4h1.5V1.8a20 20 0 0 0-2.2-.1c-2.2 0-3.7 1.3-3.7 3.8v2.1H5.8v2.9h2.5V18"/></svg>
+  {%- when 'account' -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="6.5" r="3.5"/><path d="M3 18c.7-3.6 3.4-5.5 7-5.5s6.3 1.9 7 5.5"/></svg>
+  {%- else -%}
+    <svg class="{{ classes }}" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="2"/></svg>
+{%- endcase -%}

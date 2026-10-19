@@ -1,0 +1,607 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'ProductForm-' | append: section.id
+  assign media_count = product.media.size
+  assign first_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+
+  case section.settings.gallery_ratio
+    when 'portrait'
+      assign gallery_ratio = 0.8
+    when 'square'
+      assign gallery_ratio = 1
+    else
+      assign gallery_ratio = 0.8
+      if first_media
+        assign gallery_ratio = first_media.preview_image.aspect_ratio
+      endif
+  endcase
+-%}
+
+<div class="page-width" data-product-section>
+  <div class="product">
+    {%- comment -%} Gallery {%- endcomment -%}
+    <product-gallery class="product-gallery{% if product.available == false and settings.sold_grayscale_product %} product-gallery--sold{% endif %}">
+      <div class="product-gallery__main">
+        <div class="product-gallery__slides" data-gallery-track>
+          {%- for media in product.media -%}
+            <div class="product-gallery__slide" data-media-id="{{ media.id }}">
+              <div class="media media--transparent" style="--ratio: {{ gallery_ratio }};">
+                {%- case media.media_type -%}
+                  {%- when 'image' -%}
+                    {%- if forloop.first -%}
+                      {%- assign media_loading = 'eager' -%}
+                    {%- else -%}
+                      {%- assign media_loading = 'lazy' -%}
+                    {%- endif -%}
+                    {%- assign media_alt = media.alt | default: product.title | escape -%}
+                    {{
+                      media
+                      | image_url: width: 2400
+                      | image_tag:
+                        loading: media_loading,
+                        widths: '600, 900, 1200, 1600, 2000, 2400',
+                        sizes: '(min-width: 990px) 55vw, 100vw',
+                        alt: media_alt
+                    }}
+                  {%- when 'video' -%}
+                    {{ media | video_tag: controls: true, playsinline: true, image_size: '1600x' }}
+                  {%- when 'external_video' -%}
+                    {{ media | external_video_tag }}
+                  {%- else -%}
+                    {{ media | media_tag }}
+                {%- endcase -%}
+              </div>
+            </div>
+          {%- else -%}
+            <div class="product-gallery__slide">
+              <div class="media" style="--ratio: {{ gallery_ratio }};">
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if media_count > 1 -%}
+          <div class="product-gallery__counter small" aria-hidden="true">
+            <span data-gallery-current>1</span> / {{ media_count }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if media_count > 1 -%}
+        <div class="product-gallery__thumbs">
+          {%- for media in product.media -%}
+            <button
+              class="product-gallery__thumb"
+              type="button"
+              data-gallery-thumb
+              aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-label="{{ 'products.product.media.show' | t: index: forloop.index }}"
+            >
+              <span class="media media--transparent">
+                {{ media.preview_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '', widths: '120, 240', sizes: '104px' }}
+              </span>
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </product-gallery>
+
+    {%- comment -%} Info {%- endcomment -%}
+    <div class="product__info-wrap">
+      <div class="product__info">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+
+            {%- when 'title' -%}
+              <h1 class="product__title" {{ block.shopify_attributes }}>{{ product.title | escape }}</h1>
+
+            {%- when 'price' -%}
+              <div class="product__price" {{ block.shopify_attributes }}>
+                <div data-update="price">
+                  {%- render 'price', product: product, variant: current_variant, show_sold: true -%}
+                </div>
+                {%- if block.settings.show_tax_note and cart.taxes_included -%}
+                  <p class="muted small">{{ 'products.product.taxes_included' | t }}</p>
+                {%- endif -%}
+              </div>
+
+            {%- when 'variant_picker' -%}
+              {%- unless product.has_only_default_variant -%}
+                <variant-picker
+                  class="variant-picker"
+                  data-section="{{ section.id }}"
+                  data-url="{{ product.url }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div data-update="options">
+                    {%- for option in product.options_with_values -%}
+                      <fieldset class="variant-picker__option">
+                        <legend class="variant-picker__label">{{ option.name | escape }}</legend>
+                        <div class="variant-picker__values">
+                          {%- for value in option.values -%}
+                            {%- assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index -%}
+                            <label class="variant-pill{% if value.available == false %} variant-pill--unavailable{% endif %}" for="{{ input_id }}">
+                              <input
+                                id="{{ input_id }}"
+                                type="radio"
+                                name="{{ option.name | escape }}-{{ section.id }}"
+                                value="{{ value | escape }}"
+                                {% if value.selected or option.selected_value == value %}
+                                  checked
+                                {% endif %}
+                              >
+                              <span>{{ value | escape }}</span>
+                            </label>
+                          {%- endfor -%}
+                        </div>
+                      </fieldset>
+                    {%- endfor -%}
+                  </div>
+                  <script type="application/json">
+                    {{ product.variants | json }}
+                  </script>
+                </variant-picker>
+              {%- endunless -%}
+
+            {%- when 'quantity' -%}
+              <div class="field" {{ block.shopify_attributes }}>
+                <label class="field__label" for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+                <quantity-input class="quantity">
+                  <button class="quantity__button" type="button" data-quantity="-1" aria-label="{{ 'products.product.quantity_decrease' | t }}">
+                    {%- render 'icon', name: 'minus', class: 'icon--small' -%}
+                  </button>
+                  <input
+                    id="Quantity-{{ section.id }}"
+                    class="quantity__input"
+                    type="number"
+                    name="quantity"
+                    value="1"
+                    min="1"
+                    form="{{ product_form_id }}"
+                  >
+                  <button class="quantity__button" type="button" data-quantity="1" aria-label="{{ 'products.product.quantity_increase' | t }}">
+                    {%- render 'icon', name: 'plus', class: 'icon--small' -%}
+                  </button>
+                </quantity-input>
+              </div>
+
+            {%- when 'buy_buttons' -%}
+              <product-form class="product-form" {{ block.shopify_attributes }}>
+                {%- form 'product', product, id: product_form_id, novalidate: 'novalidate' -%}
+                  <input type="hidden" name="id" value="{{ current_variant.id }}">
+                  <div class="buy-buttons" data-update="add-button">
+                    {%- if current_variant.available -%}
+                      <button class="button button--full" type="submit" name="add" data-add-button>
+                        <span data-add-label>{{ 'products.product.add_to_cart' | t }}</span>
+                      </button>
+                      {%- if block.settings.show_dynamic_checkout -%}
+                        {{ form | payment_button }}
+                      {%- endif -%}
+                    {%- else -%}
+                      <button class="button button--full" type="submit" name="add" disabled data-add-button>
+                        <span data-add-label>{{ 'products.product.sold_out' | t }}</span>
+                      </button>
+                      {%- if block.settings.enquire_label != blank -%}
+                        <a class="button button--primary button--full" href="{{ block.settings.enquire_link | default: '/pages/contact' }}">
+                          {{- block.settings.enquire_label | escape -}}
+                        </a>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </div>
+                  <p class="product-form__error small" data-product-error role="alert" hidden></p>
+                {%- endform -%}
+              </product-form>
+
+            {%- when 'description' -%}
+              {%- if product.description != blank -%}
+                <div class="rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
+              {%- endif -%}
+
+            {%- when 'artwork_details' -%}
+              {%- liquid
+                assign has_details = false
+                if block.settings.medium != blank or block.settings.dimensions != blank or block.settings.year != blank or block.settings.edition != blank
+                  assign has_details = true
+                endif
+              -%}
+              {%- if has_details -%}
+                <dl class="specs" {{ block.shopify_attributes }}>
+                  {%- if block.settings.medium != blank -%}
+                    <dt>{{ 'products.product.details.medium' | t }}</dt>
+                    <dd>{{ block.settings.medium }}</dd>
+                  {%- endif -%}
+                  {%- if block.settings.dimensions != blank -%}
+                    <dt>{{ 'products.product.details.dimensions' | t }}</dt>
+                    <dd>{{ block.settings.dimensions }}</dd>
+                  {%- endif -%}
+                  {%- if block.settings.year != blank -%}
+                    <dt>{{ 'products.product.details.year' | t }}</dt>
+                    <dd>{{ block.settings.year }}</dd>
+                  {%- endif -%}
+                  {%- if block.settings.edition != blank -%}
+                    <dt>{{ 'products.product.details.edition' | t }}</dt>
+                    <dd>{{ block.settings.edition }}</dd>
+                  {%- endif -%}
+                </dl>
+              {%- endif -%}
+
+            {%- when 'icon_list' -%}
+              <ul class="icon-list" role="list" {{ block.shopify_attributes }}>
+                {%- for i in (1..4) -%}
+                  {%- liquid
+                    assign text_key = 'text_' | append: i
+                    assign icon_key = 'icon_' | append: i
+                    assign row_text = block.settings[text_key]
+                    assign row_icon = block.settings[icon_key]
+                  -%}
+                  {%- if row_text != blank -%}
+                    <li class="icon-list__item">
+                      {%- render 'icon', name: row_icon -%}
+                      <span>{{ row_text | escape }}</span>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+
+            {%- when 'collapsible_tab' -%}
+              <details class="accordion" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+                <summary>
+                  <span class="accordion__title">
+                    {%- if block.settings.icon != 'none' -%}
+                      {%- render 'icon', name: block.settings.icon -%}
+                    {%- endif -%}
+                    {{ block.settings.heading | escape }}
+                  </span>
+                  {%- render 'icon', name: 'chevron-down' -%}
+                </summary>
+                <div class="accordion__content rte">
+                  {{ block.settings.content }}
+                  {{ block.settings.page.content }}
+                </div>
+              </details>
+
+            {%- when 'signature' -%}
+              <div class="product-signature" {{ block.shopify_attributes }}>
+                {%- if block.settings.text != blank -%}
+                  <span>{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+                {%- render 'signature', class: 'signature-img' -%}
+              </div>
+
+            {%- when 'text' -%}
+              <div class="rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Remaining images, scattered like a spread. {%- endcomment -%}
+  {%- if section.settings.scatter_media and media_count > 1 -%}
+    {%- assign speeds = '0.05,-0.03,0.08,0.02,-0.04,0.06' | split: ',' -%}
+    <div class="product-scatter scatter scatter--compact">
+      <div class="scatter__grid">
+        {%- for column in (1..2) -%}
+          <div class="scatter__col scatter__col--{% if column == 1 %}left{% else %}right{% endif %}">
+            {%- for media in product.media offset: 1 -%}
+              {%- assign side = forloop.index | modulo: 2 -%}
+              {%- if column == 1 and side == 0 -%}{%- continue -%}{%- endif -%}
+              {%- if column == 2 and side == 1 -%}{%- continue -%}{%- endif -%}
+              {%- if media.media_type != 'image' -%}{%- continue -%}{%- endif -%}
+              {%- assign speed_index = forloop.index0 | modulo: 6 -%}
+              <div class="scatter__item reveal">
+                <div class="media" style="aspect-ratio: {{ media.preview_image.aspect_ratio }};"{% if settings.motion_parallax %} data-parallax="{{ speeds[speed_index] }}"{% endif %}>
+                  {%- assign scatter_alt = media.alt | default: product.title | escape -%}
+                  {{
+                    media
+                    | image_url: width: 2000
+                    | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600, 2000', sizes: '(min-width: 990px) 40vw, 50vw', alt: scatter_alt
+                  }}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "section-main-product",
+  "settings": [
+    {
+      "type": "select",
+      "id": "gallery_ratio",
+      "label": "Gallery ratio",
+      "options": [
+        { "value": "natural", "label": "Same as main image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "natural",
+      "info": "Images are never cropped."
+    },
+    {
+      "type": "checkbox",
+      "id": "scatter_media",
+      "label": "Show all images below, scattered",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_tax_note",
+          "label": "Show “taxes included” note",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant picker",
+      "limit": 1
+    },
+    {
+      "type": "quantity",
+      "name": "Quantity",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "label": "Show “Buy it now”",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "When sold"
+        },
+        {
+          "type": "text",
+          "id": "enquire_label",
+          "label": "Enquiry button label",
+          "default": "Enquire about a similar work"
+        },
+        {
+          "type": "url",
+          "id": "enquire_link",
+          "label": "Enquiry link"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "artwork_details",
+      "name": "Artwork details",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Connect each field to a product metafield to show details per work."
+        },
+        {
+          "type": "text",
+          "id": "medium",
+          "label": "Medium",
+          "default": "Acrylic on canvas"
+        },
+        {
+          "type": "text",
+          "id": "dimensions",
+          "label": "Dimensions"
+        },
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year"
+        },
+        {
+          "type": "text",
+          "id": "edition",
+          "label": "Edition",
+          "default": "Original, one of a kind"
+        }
+      ]
+    },
+    {
+      "type": "icon_list",
+      "name": "Icon list",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_1",
+          "label": "Icon 1",
+          "options": [
+            { "value": "brush", "label": "Brush" },
+            { "value": "frame", "label": "Frame" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Return" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "pin", "label": "Location" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "ruler", "label": "Ruler" }
+          ],
+          "default": "brush"
+        },
+        {
+          "type": "text",
+          "id": "text_1",
+          "label": "Text 1",
+          "default": "Painted in Paris"
+        },
+        {
+          "type": "select",
+          "id": "icon_2",
+          "label": "Icon 2",
+          "options": [
+            { "value": "brush", "label": "Brush" },
+            { "value": "frame", "label": "Frame" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Return" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "pin", "label": "Location" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "ruler", "label": "Ruler" }
+          ],
+          "default": "certificate"
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "label": "Text 2",
+          "default": "Signed, with certificate"
+        },
+        {
+          "type": "select",
+          "id": "icon_3",
+          "label": "Icon 3",
+          "options": [
+            { "value": "brush", "label": "Brush" },
+            { "value": "frame", "label": "Frame" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Return" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "pin", "label": "Location" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "ruler", "label": "Ruler" }
+          ],
+          "default": "globe"
+        },
+        {
+          "type": "text",
+          "id": "text_3",
+          "label": "Text 3",
+          "default": "Ships worldwide"
+        },
+        {
+          "type": "select",
+          "id": "icon_4",
+          "label": "Icon 4",
+          "options": [
+            { "value": "brush", "label": "Brush" },
+            { "value": "frame", "label": "Frame" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Return" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "pin", "label": "Location" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "ruler", "label": "Ruler" }
+          ],
+          "default": "frame"
+        },
+        {
+          "type": "text",
+          "id": "text_4",
+          "label": "Text 4"
+        }
+      ]
+    },
+    {
+      "type": "collapsible_tab",
+      "name": "Collapsible tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shipping"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "ruler", "label": "Ruler" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Return" },
+            { "value": "brush", "label": "Brush" },
+            { "value": "frame", "label": "Frame" },
+            { "value": "certificate", "label": "Certificate" },
+            { "value": "question", "label": "Question" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Content from page"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "signature",
+      "name": "Signature",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Signed by the artist"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

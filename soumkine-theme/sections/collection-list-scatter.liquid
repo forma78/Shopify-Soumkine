@@ -1,0 +1,110 @@
+{%- liquid
+  assign speeds = '0.05,-0.04,0.08,0.03,-0.02,0.06' | split: ','
+-%}
+<div class="section{% if section.settings.spacing == 'small' %} section--tight{% endif %}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h3 scatter__title--static reveal">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <div class="scatter scatter--compact">
+      <div class="scatter__grid">
+        {%- for column in (1..2) -%}
+          <div class="scatter__col scatter__col--{% if column == 1 %}left{% else %}right{% endif %}">
+            {%- for block in section.blocks -%}
+              {%- assign side = forloop.index | modulo: 2 -%}
+              {%- if column == 1 and side == 0 -%}{%- continue -%}{%- endif -%}
+              {%- if column == 2 and side == 1 -%}{%- continue -%}{%- endif -%}
+              {%- liquid
+                assign speed_index = forloop.index0 | modulo: 6
+                assign speed = nil
+                if section.settings.parallax
+                  assign speed = speeds[speed_index]
+                endif
+                assign placeholder_number = forloop.index0 | modulo: 6 | plus: 1
+              -%}
+              <div class="scatter__item reveal" {{ block.shopify_attributes }}>
+                {%- render 'collection-card',
+                  collection: block.settings.collection,
+                  image: block.settings.image,
+                  title: block.settings.title,
+                  parallax: speed,
+                  sizes: '(min-width: 990px) 32vw, 50vw',
+                  placeholder_index: placeholder_number
+                -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Scattered collections",
+  "tag": "section",
+  "class": "section-collection-list",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Series"
+    },
+    {
+      "type": "checkbox",
+      "id": "parallax",
+      "label": "Parallax",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space above",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "default", "label": "Default" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Uses the collection image when empty."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Uses the collection title when empty."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scattered collections",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    {%- assign gift_value = gift_card.initial_value | money -%}
+    <title>{{ 'gift_cards.issued.title' | t: value: gift_value, shop: shop.name }}</title>
+    {%- render 'css-variables' -%}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    {{ content_for_header }}
+  </head>
+  <body class="button-style--{{ settings.button_style }}">
+    <main class="not-found" style="padding-bottom: 80px;">
+      <p>{{ shop.name | escape }}</p>
+      <h1 class="h-display">{{ gift_card.initial_value | money }}</h1>
+      {%- if gift_card.enabled == false or gift_card.expired -%}
+        <p class="muted">{{ 'gift_cards.issued.expired' | t }}</p>
+      {%- endif -%}
+      <p class="h3">{{ gift_card.code | format_code }}</p>
+      {%- if gift_card.balance != gift_card.initial_value -%}
+        {%- assign gift_balance = gift_card.balance | money -%}
+        <p>{{ 'gift_cards.issued.remaining' | t: balance: gift_balance }}</p>
+      {%- endif -%}
+      <div id="QrCode" data-identifier="{{ gift_card.qr_identifier }}" style="width: 120px; height: 120px;"></div>
+      <div class="customer__actions" style="justify-content: center;">
+        <a class="button button--primary" href="{{ shop.url }}" target="_blank" rel="noopener">{{ 'gift_cards.issued.shop' | t }}</a>
+        <button class="button" type="button" onclick="window.print();">{{ 'gift_cards.issued.print' | t }}</button>
+      </div>
+      {%- if gift_card.pass_url -%}
+        <a href="{{ gift_card.pass_url }}">
+          <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.apple_wallet' | t }}" loading="lazy">
+        </a>
+      {%- endif -%}
+    </main>
+    <script>
+      window.addEventListener('load', function () {
+        var el = document.getElementById('QrCode');
+        if (window.QRCode && el) {
+          new QRCode(el, { text: el.dataset.identifier, width: 120, height: 120 });
+        }
+      });
+    </script>
+  </body>
+</html>

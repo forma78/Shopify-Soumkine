@@ -1,0 +1,36 @@
+<theme-drawer
+  id="SearchDrawer"
+  class="drawer drawer--top search-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'search.title' | t }}"
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <div class="drawer__header page-width">
+    <span>{{ 'search.title' | t }}</span>
+    <button class="icon-button drawer__close" type="button" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
+      {%- render 'icon', name: 'close', class: 'icon--large' -%}
+    </button>
+  </div>
+  <div class="drawer__body page-width">
+    <predictive-search>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-drawer__form">
+        <label class="visually-hidden" for="SearchDrawerInput">{{ 'search.placeholder' | t }}</label>
+        <input
+          id="SearchDrawerInput"
+          class="search-drawer__input"
+          type="search"
+          name="q"
+          placeholder="{{ 'search.placeholder' | t }}"
+          autocomplete="off"
+          data-autofocus
+        >
+        <button class="icon-button" type="submit" aria-label="{{ 'search.submit' | t }}">
+          {%- render 'icon', name: 'arrow-right', class: 'icon--large' -%}
+        </button>
+      </form>
+      <div class="predictive-results" data-predictive-results></div>
+    </predictive-search>
+  </div>
+</theme-drawer>

@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "banner": {
+      "type": "image-banner",
+      "settings": {
+        "heading": "It gave me my hand back.",
+        "height": "medium",
+        "overlay": 15,
+        "text_color": "light",
+        "spacing": "none"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": { "layout": "split" }
+    },
+    "video": {
+      "type": "video-feature",
+      "settings": {
+        "layout": "framed",
+        "frame_width": 56,
+        "ratio_fallback": 1.5,
+        "height": "adapt",
+        "overlay": 0,
+        "content_position": "bottom",
+        "eyebrow": "Atelier, Paris",
+        "heading": "The machine holds the brush",
+        "button_label": ""
+      }
+    }
+  },
+  "order": ["banner", "main", "video"]
+}

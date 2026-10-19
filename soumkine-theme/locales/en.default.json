@@ -1,0 +1,241 @@
+{
+  "general": {
+    "pagination": {
+      "label": "Pagination",
+      "page": "Page {{ page }}",
+      "next": "Next",
+      "previous": "Previous"
+    },
+    "slider": {
+      "next": "Next",
+      "previous": "Previous"
+    },
+    "video": {
+      "play": "Play",
+      "pause": "Pause"
+    }
+  },
+  "accessibility": {
+    "skip_to_text": "Skip to content",
+    "close": "Close"
+  },
+  "header": {
+    "menu": "Menu",
+    "search": "Search",
+    "cart": "Cart",
+    "account": "Account",
+    "login": "Log in",
+    "primary_navigation": "Primary"
+  },
+  "newsletter": {
+    "label": "Email address",
+    "placeholder": "email@example.com",
+    "button": "Subscribe",
+    "success": "Thank you. You’re on the list."
+  },
+  "localization": {
+    "country_label": "Country / region",
+    "language_label": "Language"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "quantity_decrease": "Decrease quantity",
+      "quantity_increase": "Increase quantity",
+      "taxes_included": "Taxes included.",
+      "placeholder_title": "Untitled work",
+      "media": {
+        "show": "Show image {{ index }}"
+      },
+      "price": {
+        "from_price_html": "From {{ price }}",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price"
+      },
+      "details": {
+        "medium": "Medium",
+        "dimensions": "Size",
+        "year": "Year",
+        "edition": "Edition"
+      }
+    }
+  },
+  "collections": {
+    "filter_and_sort": "Filter and sort",
+    "sort_by": "Sort by",
+    "apply": "Apply",
+    "clear": "Clear all",
+    "empty": "No works found.",
+    "navigation": "Collections",
+    "price_from": "From",
+    "price_to": "To",
+    "product_count": {
+      "one": "{{ count }} work",
+      "other": "{{ count }} works"
+    }
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "continue": "Continue browsing",
+    "subtotal": "Subtotal",
+    "taxes_and_shipping": "Taxes and shipping calculated at checkout.",
+    "checkout": "Check out",
+    "view_cart": "View cart",
+    "update": "Update",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "decrease": "Decrease quantity for {{ product }}",
+    "increase": "Increase quantity for {{ product }}",
+    "note": "Order note",
+    "error": "Something went wrong. Please try again."
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search",
+    "submit": "Submit search",
+    "page": "Page",
+    "no_results": "Nothing found for “{{ terms }}”.",
+    "no_results_short": "Nothing found.",
+    "results_count": {
+      "one": "{{ count }} result for “{{ terms }}”",
+      "other": "{{ count }} results for “{{ terms }}”"
+    }
+  },
+  "blogs": {
+    "all": "All",
+    "article": {
+      "back": "Back to {{ title }}",
+      "placeholder_title": "Journal entry"
+    },
+    "comments": {
+      "title": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      },
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "post": "Post comment",
+      "success": "Your comment was posted.",
+      "success_moderated": "Your comment was submitted and will appear once approved."
+    }
+  },
+  "contact": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "subject": "About",
+    "message": "Message",
+    "send": "Send",
+    "success": "Thank you. I’ll write back soon."
+  },
+  "customer": {
+    "login": {
+      "title": "Log in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "forgot": "Forgot your password?",
+      "create": "Create account",
+      "guest_title": "Continue as a guest",
+      "guest_continue": "Continue"
+    },
+    "recover": {
+      "title": "Reset your password",
+      "submit": "Send reset link",
+      "success": "We’ve sent you an email with a link to reset your password."
+    },
+    "register": {
+      "title": "Create account",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "submit": "Create"
+    },
+    "account": {
+      "title": "Account",
+      "logout": "Log out",
+      "orders": "Orders",
+      "details": "Details",
+      "addresses": "Addresses"
+    },
+    "orders": {
+      "order": "Order",
+      "date": "Date",
+      "status": "Status",
+      "total": "Total",
+      "none": "No orders yet."
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "cancelled": "Cancelled on {{ date }}",
+      "product": "Work",
+      "quantity": "Quantity",
+      "billing_address": "Billing address",
+      "shipping_address": "Shipping address"
+    },
+    "addresses": {
+      "title": "Addresses",
+      "default": "Default",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "add": "Add address",
+      "company": "Company",
+      "address1": "Address",
+      "address2": "Apartment, suite, etc.",
+      "city": "City",
+      "zip": "Postal code",
+      "country": "Country / region",
+      "province": "Province / state",
+      "set_default": "Set as default address"
+    },
+    "activate": {
+      "title": "Activate account",
+      "confirm": "Confirm password",
+      "submit": "Activate",
+      "decline": "Decline invitation"
+    },
+    "reset": {
+      "title": "Reset password",
+      "submit": "Reset password"
+    }
+  },
+  "password": {
+    "enter": "Enter",
+    "label": "Password",
+    "admin_link_html": "Store owner? <a href=\"/admin\" class=\"link-underline\">Log in here</a>"
+  },
+  "templates": {
+    "404": {
+      "title": "Not found",
+      "subtext": "404"
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Your {{ value }} gift card for {{ shop }}",
+      "expired": "Expired",
+      "remaining": "{{ balance }} left",
+      "shop": "Shop",
+      "print": "Print",
+      "apple_wallet": "Add to Apple Wallet"
+    }
+  },
+  "commissions": {
+    "form": {
+      "company": "Company / venue",
+      "project": "Project",
+      "format": "Format",
+      "works": "Number of works",
+      "location": "City / country",
+      "timeline": "Timeline",
+      "timeline_placeholder": "e.g. opening in spring 2027",
+      "message": "Message",
+      "message_placeholder": "Your space, light, palette, number of rooms…"
+    }
+  }
+}

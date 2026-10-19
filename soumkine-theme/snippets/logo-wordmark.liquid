@@ -1,0 +1,12 @@
+{%- comment -%}
+  The SOUMKINE wordmark from the logo.
+  Accepts: class (string), label (string, accessible name; decorative when empty)
+{%- endcomment -%}
+<svg
+  class="logo-svg{% if class %} {{ class }}{% endif %}"
+  viewBox="921.66 0 1444.1 188.58"
+  {% if label != blank %}role="img" aria-label="{{ label | escape }}"{% else %}aria-hidden="true"{% endif %}
+  focusable="false"
+>
+  <use href="#soumkine-wordmark"/>
+</svg>

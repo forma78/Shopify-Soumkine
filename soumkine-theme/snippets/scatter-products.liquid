@@ -1,0 +1,51 @@
+{%- comment -%}
+  Two staggered columns of product cards, in the rhythm of an editorial spread.
+  Accepts:
+  - products (array): products to show; placeholders are shown when empty
+  - limit (number)
+  - ratio (string): card image ratio
+  - parallax (boolean)
+  - offset (number): index offset used to vary parallax across paginated pages
+{%- endcomment -%}
+{%- liquid
+  assign scatter_limit = limit | default: 8
+  assign speeds = '0.06,-0.03,0.09,0.02,-0.05,0.07,0.03,-0.02' | split: ','
+-%}
+<div class="scatter__grid">
+  {%- for column in (1..2) -%}
+    <div class="scatter__col scatter__col--{% if column == 1 %}left{% else %}right{% endif %}">
+      {%- if products.size > 0 -%}
+        {%- for product in products limit: scatter_limit -%}
+          {%- assign side = forloop.index | modulo: 2 -%}
+          {%- if column == 1 and side == 0 -%}{%- continue -%}{%- endif -%}
+          {%- if column == 2 and side == 1 -%}{%- continue -%}{%- endif -%}
+          {%- liquid
+            assign speed_index = forloop.index0 | modulo: 8
+            assign speed = nil
+            if parallax
+              assign speed = speeds[speed_index]
+            endif
+          -%}
+          <div class="scatter__item reveal">
+            {%- render 'product-card',
+              product: product,
+              ratio: ratio,
+              parallax: speed,
+              sizes: '(min-width: 990px) 32vw, (min-width: 750px) 40vw, 50vw'
+            -%}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..scatter_limit) -%}
+          {%- assign side = i | modulo: 2 -%}
+          {%- if column == 1 and side == 0 -%}{%- continue -%}{%- endif -%}
+          {%- if column == 2 and side == 1 -%}{%- continue -%}{%- endif -%}
+          {%- assign placeholder_number = i | modulo: 6 | plus: 1 -%}
+          <div class="scatter__item reveal">
+            {%- render 'product-card', product: nil, ratio: ratio, placeholder_index: placeholder_number -%}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</div>

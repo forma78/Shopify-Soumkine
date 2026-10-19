@@ -1,0 +1,57 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Original paintings on canvas, made in a small Paris atelier. I choose every colour, I lay the paint by hand, I direct every pass. The machine holds the brush.</p>",
+            "show_social": true
+          }
+        },
+        "menu_1": {
+          "type": "menu",
+          "settings": {
+            "heading": "",
+            "menu": "main-menu"
+          }
+        },
+        "menu_2": {
+          "type": "menu",
+          "settings": {
+            "heading": "",
+            "menu": "footer"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "text": "New works, first. Nothing else."
+          }
+        }
+      },
+      "block_order": [
+        "text",
+        "menu_1",
+        "menu_2",
+        "newsletter"
+      ],
+      "settings": {
+        "show_wordmark": true,
+        "show_signature": true,
+        "signature_position": "stacked",
+        "show_payment_icons": true,
+        "show_policies": true,
+        "show_powered_by": false,
+        "show_country_selector": true,
+        "show_language_selector": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

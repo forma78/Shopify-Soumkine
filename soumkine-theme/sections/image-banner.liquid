@@ -1,0 +1,114 @@
+{%- liquid
+  case section.settings.height
+    when 'small'
+      assign min_height = '50vh'
+    when 'large'
+      assign min_height = '100vh'
+    else
+      assign min_height = '76vh'
+  endcase
+-%}
+<div class="section{% if section.settings.spacing == 'none' %} section--flush{% elsif section.settings.spacing == 'small' %} section--tight{% endif %}">
+  <div
+    class="banner{% if section.settings.text_color == 'dark' %} banner--dark-text{% endif %}"
+    style="--min-height: {{ min_height }}; --overlay: {{ section.settings.overlay | divided_by: 100.0 }};"
+  >
+    <div class="banner__media">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 3000
+          | image_tag: loading: 'eager', widths: '800, 1200, 1600, 2000, 2400, 3000', sizes: '100vw'
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+    <div class="banner__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="statement">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a class="button" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image banner",
+  "tag": "section",
+  "class": "section-image-banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Each one, one of a kind."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Full screen" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "overlay",
+      "label": "Darken image",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text color",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space above",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "default", "label": "Default" }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image banner"
+    }
+  ]
+}
+{% endschema %}

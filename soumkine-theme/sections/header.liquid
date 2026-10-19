@@ -1,0 +1,317 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign wordmark = settings.wordmark_text | default: shop.name
+  assign nav_position = section.settings.nav_position
+-%}
+{%- if section.settings.sticky == 'none' -%}
+  {% style %}
+    .shopify-section.section-header { position: relative; }
+  {% endstyle %}
+{%- endif -%}
+
+<header
+  class="header header--nav-{{ nav_position }}{% if section.settings.transparent and request.page_type == 'index' %} header--transparent{% endif %}"
+  data-sticky="{{ section.settings.sticky }}"
+>
+  <div class="header__start">
+    <button
+      class="header__menu-toggle link-hover"
+      type="button"
+      data-drawer-open="MenuDrawer"
+      aria-controls="MenuDrawer"
+      aria-expanded="false"
+    >
+      {{- 'header.menu' | t -}}
+    </button>
+
+    <a class="header__wordmark" href="{{ routes.root_url }}">
+      {%- if section.settings.logo != blank -%}
+        {%- assign logo_style = '--logo-height: ' | append: section.settings.logo_height | append: 'px' -%}
+        {{
+          section.settings.logo
+          | image_url: height: 120
+          | image_tag: alt: shop.name, style: logo_style, loading: 'eager', widths: '120, 240'
+        }}
+      {%- elsif settings.wordmark_style == 'logo' -%}
+        {%- assign logo_style = '--logo-height: ' | append: section.settings.logo_height | append: 'px' -%}
+        <span class="header__logo" style="{{ logo_style }}">
+          {%- render 'logo-wordmark', label: shop.name -%}
+        </span>
+      {%- else -%}
+        <span>{{ wordmark | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.show_signature -%}
+        {%- render 'signature', class: 'header__signature', loading: 'eager' -%}
+      {%- endif -%}
+    </a>
+
+    {%- if nav_position == 'left' -%}
+      {%- render 'header-nav', menu: menu -%}
+    {%- endif -%}
+  </div>
+
+  <div class="header__end">
+    {%- if nav_position == 'right' -%}
+      {%- render 'header-nav', menu: menu -%}
+    {%- endif -%}
+
+    {%- if section.settings.show_search -%}
+      <a
+        class="link-hover"
+        href="{{ routes.search_url }}"
+        data-drawer-open="SearchDrawer"
+        aria-controls="SearchDrawer"
+        aria-expanded="false"
+      >
+        {{- 'header.search' | t -}}
+      </a>
+    {%- endif -%}
+
+    {%- if shop.customer_accounts_enabled and section.settings.show_account -%}
+      <a class="link-hover header__hide-mobile" href="{{ routes.account_url }}">
+        {%- if customer -%}{{ 'header.account' | t }}{%- else -%}{{ 'header.login' | t }}{%- endif -%}
+      </a>
+    {%- endif -%}
+
+    <a
+      class="link-hover"
+      href="{{ routes.cart_url }}"
+      {% if settings.cart_type == 'drawer' and request.page_type != 'cart' %}
+        data-drawer-open="CartDrawer" aria-controls="CartDrawer" aria-expanded="false"
+      {% endif %}
+    >
+      {{- 'header.cart' | t }} (<span data-cart-count>{{ cart.item_count }}</span>)
+    </a>
+  </div>
+</header>
+
+<menu-drawer
+  id="MenuDrawer"
+  data-portal
+  class="drawer drawer--left menu-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'header.menu' | t }}"
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <div class="drawer__header">
+    <button class="icon-button drawer__close" type="button" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
+      {%- render 'icon', name: 'close', class: 'icon--large' -%}
+    </button>
+  </div>
+
+  <div class="drawer__body">
+    {%- comment -%} One panel per top-level item with children, plus a full panel for small screens. {%- endcomment -%}
+    {%- for link in menu.links -%}
+      {%- if link.links.size > 0 -%}
+        <nav class="menu-drawer__panel" data-menu-panel="{{ link.handle }}" aria-label="{{ link.title | escape }}">
+          <ul class="menu-drawer__list" role="list">
+            {%- comment -%} The parent itself leads the panel, unless a sub-item already points to it. {%- endcomment -%}
+            {%- liquid
+              assign parent_listed = false
+              for child in link.links
+                if child.url == link.url
+                  assign parent_listed = true
+                endif
+              endfor
+            -%}
+            {%- unless parent_listed -%}
+              <li>
+                <a class="menu-drawer__link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
+                  {{- link.title | escape -}}
+                </a>
+              </li>
+            {%- endunless -%}
+            {%- for child in link.links -%}
+              <li>
+                <a class="menu-drawer__link" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>
+                  {{- child.title | escape -}}
+                </a>
+                {%- if child.links.size > 0 -%}
+                  <ul class="menu-drawer__sublist" role="list">
+                    {%- for grandchild in child.links -%}
+                      <li>
+                        <a class="menu-drawer__sublink link-hover" href="{{ grandchild.url }}"{% if grandchild.current %} aria-current="page"{% endif %}>
+                          {{- grandchild.title | escape -}}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <nav class="menu-drawer__panel" data-menu-panel="all" aria-label="{{ 'header.menu' | t }}">
+      <ul class="menu-drawer__list" role="list">
+        {%- for link in menu.links -%}
+          <li>
+            <a class="menu-drawer__link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
+              {{- link.title | escape -}}
+            </a>
+            {%- if link.links.size > 0 -%}
+              <ul class="menu-drawer__sublist" role="list">
+                {%- for child in link.links -%}
+                  <li>
+                    <a class="menu-drawer__sublink link-hover" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>
+                      {{- child.title | escape -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- if section.settings.drawer_image != blank -%}
+      <a class="menu-drawer__feature" href="{{ section.settings.drawer_link | default: '#' }}">
+        <span class="media" style="aspect-ratio: {{ section.settings.drawer_image.aspect_ratio }};">
+          {{
+            section.settings.drawer_image
+            | image_url: width: 400
+            | image_tag: loading: 'lazy', widths: '200, 400', sizes: '96px'
+          }}
+        </span>
+        {%- if section.settings.drawer_caption != blank -%}
+          <span>{{ section.settings.drawer_caption | escape }}</span>
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+  </div>
+
+  <div class="drawer__footer menu-drawer__signature">
+    <ul class="menu-drawer__secondary" role="list">
+      {%- for link in section.settings.drawer_menu.links -%}
+        <li><a class="link-hover" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+      {%- endfor -%}
+      {%- if shop.customer_accounts_enabled and section.settings.show_account -%}
+        <li><a class="link-hover" href="{{ routes.account_url }}">{{ 'header.account' | t }}</a></li>
+      {%- endif -%}
+    </ul>
+    {%- if section.settings.drawer_signature -%}
+      {%- render 'signature', class: 'signature-img' -%}
+    {%- endif -%}
+  </div>
+</menu-drawer>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Wordmark"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image",
+      "info": "Optional. Replaces the wordmark set in Theme settings › Brand."
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "show_signature",
+      "label": "Show signature next to wordmark",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu",
+      "info": "Items with sub-items open the side panel."
+    },
+    {
+      "type": "select",
+      "id": "nav_position",
+      "label": "Menu position",
+      "options": [
+        { "value": "left", "label": "Next to wordmark" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account link",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "sticky",
+      "label": "Sticky header",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "always", "label": "Always" },
+        { "value": "auto", "label": "Hide on scroll down" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent",
+      "label": "Transparent on home page",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Side panel"
+    },
+    {
+      "type": "link_list",
+      "id": "drawer_menu",
+      "label": "Secondary links",
+      "info": "Small links at the bottom of the panel."
+    },
+    {
+      "type": "image_picker",
+      "id": "drawer_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "drawer_caption",
+      "label": "Image caption"
+    },
+    {
+      "type": "url",
+      "id": "drawer_link",
+      "label": "Image link"
+    },
+    {
+      "type": "checkbox",
+      "id": "drawer_signature",
+      "label": "Show signature",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

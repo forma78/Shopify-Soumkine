@@ -1,0 +1,12 @@
+{%- comment -%}
+  The “by” from the logo.
+  Accepts: class (string), label (string, accessible name; decorative when empty)
+{%- endcomment -%}
+<svg
+  class="logo-svg{% if class %} {{ class }}{% endif %}"
+  viewBox="1551.73 345.03 190.82 164.07"
+  {% if label != blank %}role="img" aria-label="{{ label | escape }}"{% else %}aria-hidden="true"{% endif %}
+  focusable="false"
+>
+  <use href="#soumkine-by"/>
+</svg>

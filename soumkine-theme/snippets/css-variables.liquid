@@ -1,0 +1,92 @@
+{%- comment -%}
+  Bundled typefaces (SIL Open Font License) and design tokens driven by theme settings.
+{%- endcomment -%}
+{%- liquid
+  assign heading_scale = settings.heading_scale | divided_by: 100.0
+  case settings.wordmark_font
+    when 'heading'
+      assign wordmark_family = 'var(--font-heading)'
+      assign wordmark_weight = 500
+      assign wordmark_spacing = '-0.06em'
+    when 'mono'
+      assign wordmark_family = 'var(--font-mono)'
+      assign wordmark_weight = 700
+      assign wordmark_spacing = '-0.08em'
+    else
+      assign wordmark_family = 'var(--font-display)'
+      assign wordmark_weight = 700
+      assign wordmark_spacing = '-0.02em'
+  endcase
+-%}
+{% style %}
+  @font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url({{ 'space-mono-400.woff2' | asset_url }}) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url({{ 'space-mono-400-ext.woff2' | asset_url }}) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url({{ 'space-mono-700.woff2' | asset_url }}) format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter Tight';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url({{ 'inter-tight-var.woff2' | asset_url }}) format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Inter Tight';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url({{ 'inter-tight-var-ext.woff2' | asset_url }}) format('woff2-variations');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'Antonio';
+    font-style: normal;
+    font-weight: 100 700;
+    font-display: swap;
+    src: url({{ 'antonio-var.woff2' | asset_url }}) format('woff2-variations');
+  }
+
+  :root {
+    --color-bg: {{ settings.color_background }};
+    --color-fg: {{ settings.color_text }};
+    --color-muted: {{ settings.color_muted }};
+    --color-surface: {{ settings.color_surface }};
+    --color-inverse-bg: {{ settings.color_inverse_background }};
+    --color-inverse-fg: {{ settings.color_inverse_text }};
+
+    --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --font-heading: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-display: 'Antonio', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+    --font-wordmark: {{ wordmark_family }};
+    --wordmark-weight: {{ wordmark_weight }};
+    --wordmark-spacing: {{ wordmark_spacing }};
+
+    --text-size: {{ settings.body_font_size }}px;
+    --text-transform: {% if settings.body_uppercase %}uppercase{% else %}none{% endif %};
+    --rte-transform: {% if settings.rte_uppercase %}uppercase{% else %}none{% endif %};
+    --heading-scale: {{ heading_scale }};
+
+    --page-margin-max: {{ settings.page_margin }}px;
+    --radius: {{ settings.image_radius }}px;
+  }
+{% endstyle %}

@@ -1,0 +1,284 @@
+{%- comment -%}
+  One commission offer (hotels, restaurants, private collections) on the commissions landing page.
+  The anchor lets the intro's "Choose your space" links and menu links (#anchor) scroll here.
+  The call to action scrolls to the enquiry form and preselects the project type.
+{%- endcomment -%}
+{%- liquid
+  assign anchor = section.settings.anchor | handle
+  assign images = ''
+  for i in (1..4)
+    assign key = 'image_' | append: i
+    if section.settings[key] != blank
+      assign images = images | append: key | append: ','
+    endif
+  endfor
+  assign image_keys = images | split: ','
+  assign main_key = image_keys.first
+
+  assign cta_href = section.settings.cta_target | strip
+  assign cta_first = cta_href | slice: 0
+  assign cta_is_url = false
+  if cta_first == '/' or cta_first == '#'
+    assign cta_is_url = true
+  endif
+  if cta_href contains ':'
+    assign cta_is_url = true
+  endif
+  unless cta_is_url
+    assign cta_href = '#' | append: cta_href
+  endunless
+-%}
+<div
+  {% if anchor != blank %}
+    id="{{ anchor }}"
+  {% endif %}
+  class="section commission-space commission-space--media-{{ section.settings.image_position }}"
+>
+  <div class="page-width">
+    <p class="commission-space__index">
+      {%- if section.settings.number != blank -%}<span>{{ section.settings.number | escape }}</span>{%- endif -%}
+      <span>{{ section.settings.eyebrow | escape }}</span>
+    </p>
+
+    <div class="commission-space__grid">
+      <div class="commission-space__media">
+        {%- if main_key != blank -%}
+          {%- assign main_image = section.settings[main_key] -%}
+          <div class="media reveal" style="aspect-ratio: {{ main_image.aspect_ratio }};">
+            {{
+              main_image
+              | image_url: width: 2400
+              | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600, 2000, 2400', sizes: '(min-width: 990px) 58vw, 100vw'
+            }}
+            {%- if section.settings.image_label != blank -%}
+              <span class="media-label"><span class="media-label__full">{{ section.settings.image_label | escape }}</span><span class="media-label__short">{{ section.settings.image_label_short | default: section.settings.image_label | escape }}</span></span>
+            {%- endif -%}
+          </div>
+          {%- if image_keys.size > 1 -%}
+            <div class="commission-space__more">
+              {%- for key in image_keys offset: 1 -%}
+                {%- assign extra = section.settings[key] -%}
+                <div class="media reveal" style="aspect-ratio: {{ extra.aspect_ratio }};">
+                  {{
+                    extra
+                    | image_url: width: 1400
+                    | image_tag: loading: 'lazy', widths: '400, 700, 1000, 1400', sizes: '(min-width: 990px) 20vw, 33vw'
+                  }}
+                  {%- if section.settings.image_label != blank -%}
+                    <span class="media-label"><span class="media-label__full">{{ section.settings.image_label | escape }}</span><span class="media-label__short">{{ section.settings.image_label_short | default: section.settings.image_label | escape }}</span></span>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="media" style="aspect-ratio: 1;">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="commission-space__content">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h1 commission-space__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <ol class="feature-list" role="list">
+            {%- for block in section.blocks -%}
+              <li class="feature-list__item" {{ block.shopify_attributes }}>
+                <span class="feature-list__index">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                <div>
+                  <h3 class="h4 feature-list__title">{{ block.settings.title | escape }}</h3>
+                  {%- if block.settings.text != blank -%}
+                    <p>{{ block.settings.text | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </li>
+            {%- endfor -%}
+          </ol>
+        {%- endif -%}
+
+        {%- if section.settings.note != blank -%}
+          <blockquote class="commission-note">
+            <div class="rte">{{ section.settings.note }}</div>
+            {%- if section.settings.note_signature -%}
+              {%- render 'signature', class: 'signature-img commission-note__signature' -%}
+            {%- endif -%}
+          </blockquote>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank -%}
+          <a
+            class="button button--primary button--large commission-space__cta"
+            href="{{ cta_href }}"
+            {% if section.settings.cta_project != blank %}
+              data-project="{{ section.settings.cta_project | escape }}"
+            {% endif %}
+          >
+            {{- section.settings.cta_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Commission offer",
+  "tag": "section",
+  "class": "section-commission-space",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor",
+      "info": "Link to this section with #anchor, e.g. /pages/open-for-commissions#bespoke-for-hotels.",
+      "default": "bespoke-for-hotels"
+    },
+    {
+      "type": "text",
+      "id": "number",
+      "label": "Number",
+      "default": "01"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Title",
+      "default": "Bespoke for Hotels"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Art that makes guests stay longer."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Main image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Image 4"
+    },
+    {
+      "type": "text",
+      "id": "image_label",
+      "label": "Image label",
+      "info": "Shown on every image in this section, e.g. to mark concept visuals. Leave empty to hide.",
+      "default": "Concept — AI-generated image"
+    },
+    {
+      "type": "text",
+      "id": "image_label_short",
+      "label": "Image label on phones",
+      "default": "AI-gen image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Personal note"
+    },
+    {
+      "type": "richtext",
+      "id": "note",
+      "label": "Note"
+    },
+    {
+      "type": "checkbox",
+      "id": "note_signature",
+      "label": "Sign the note",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label",
+      "default": "Request a proposal"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "Link",
+      "info": "An anchor on this page (enquire) or a URL.",
+      "default": "enquire"
+    },
+    {
+      "type": "text",
+      "id": "cta_project",
+      "label": "Project type to preselect",
+      "info": "Must match one of the project types in the enquiry form.",
+      "default": "Hotel"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Each room gets its own original"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Commission offer",
+      "blocks": [
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
+      ]
+    }
+  ]
+}
+{% endschema %}

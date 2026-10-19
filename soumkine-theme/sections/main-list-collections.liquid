@@ -1,0 +1,45 @@
+{%- liquid
+  assign speeds = '0.05,-0.04,0.08,0.03,-0.02,0.06' | split: ','
+-%}
+<div class="page-width">
+  <header class="collection-header">
+    <h1 class="h1">{{ section.settings.title | escape }}</h1>
+  </header>
+  <div class="scatter scatter--compact">
+    <div class="scatter__grid">
+      {%- for column in (1..2) -%}
+        <div class="scatter__col scatter__col--{% if column == 1 %}left{% else %}right{% endif %}">
+          {%- for collection in collections -%}
+            {%- assign side = forloop.index | modulo: 2 -%}
+            {%- if column == 1 and side == 0 -%}{%- continue -%}{%- endif -%}
+            {%- if column == 2 and side == 1 -%}{%- continue -%}{%- endif -%}
+            {%- assign speed_index = forloop.index0 | modulo: 6 -%}
+            <div class="scatter__item reveal">
+              {%- render 'collection-card',
+                collection: collection,
+                parallax: speeds[speed_index],
+                sizes: '(min-width: 990px) 32vw, 50vw'
+              -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "tag": "section",
+  "class": "section-list-collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Series"
+    }
+  ]
+}
+{% endschema %}

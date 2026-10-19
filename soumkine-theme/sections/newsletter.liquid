@@ -1,0 +1,78 @@
+{%- assign form_id = 'Newsletter-' | append: section.id -%}
+<div class="section{% if section.settings.spacing == 'small' %} section--tight{% elsif section.settings.spacing == 'none' %} section--flush{% endif %}">
+  <div class="newsletter{% if section.settings.style == 'plain' %} newsletter--plain{% endif %}">
+    <h2 class="h3 newsletter__heading">{{ section.settings.heading | escape }}</h2>
+    <p>{{ section.settings.text | escape }}</p>
+    {%- form 'customer', id: form_id -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      {%- if form.posted_successfully? -%}
+        <p class="form-message" role="status">{{ 'newsletter.success' | t }}</p>
+      {%- else -%}
+        <div class="inline-form">
+          <label class="visually-hidden" for="{{ form_id }}-email">{{ 'newsletter.label' | t }}</label>
+          <input
+            id="{{ form_id }}-email"
+            class="input"
+            type="email"
+            name="contact[email]"
+            autocomplete="email"
+            placeholder="{{ 'newsletter.placeholder' | t }}"
+            required
+          >
+          <button class="button button--primary" type="submit">{{ 'newsletter.button' | t }}</button>
+        </div>
+        {%- if form.errors -%}
+          <p class="form-message form-message--error" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Letters from the atelier"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "New works, first. Nothing else."
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Background",
+      "options": [
+        { "value": "surface", "label": "Panel" },
+        { "value": "plain", "label": "None" }
+      ],
+      "default": "surface"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space above",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "default", "label": "Default" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

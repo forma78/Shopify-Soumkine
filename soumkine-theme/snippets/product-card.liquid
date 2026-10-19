@@ -1,0 +1,84 @@
+{%- comment -%}
+  Accepts:
+  - product (object): blank renders a placeholder card
+  - ratio (string): 'natural' | 'portrait' | 'square' | 'landscape'
+  - sizes (string): sizes attribute for the image
+  - parallax (number): optional parallax speed
+  - placeholder_index (number): 1-6
+  - class (string)
+{%- endcomment -%}
+{%- liquid
+  assign media = product.featured_media
+  assign card_ratio = 0.75
+  case ratio
+    when 'natural'
+      if media
+        assign card_ratio = media.preview_image.aspect_ratio
+      endif
+    when 'square'
+      assign card_ratio = 1
+    when 'landscape'
+      assign card_ratio = 1.333
+  endcase
+  assign second = nil
+  if settings.card_show_secondary_image and product.media.size > 1
+    assign second = product.media[1]
+  endif
+  assign card_sizes = sizes | default: '(min-width: 990px) 33vw, 50vw'
+  assign card_alt = media.alt | default: product.title | escape
+  assign placeholder_number = placeholder_index | default: 1
+  assign placeholder_name = 'product-' | append: placeholder_number
+-%}
+<div class="card{% if product != blank and product.available == false and settings.sold_grayscale %} card--sold{% endif %}{% if class %} {{ class }}{% endif %}"{% if parallax %} data-parallax="{{ parallax }}"{% endif %}>
+  {%- if product != blank -%}
+    <a class="card__link" href="{{ product.url }}">
+      <div class="card__media">
+        <div class="media" style="--ratio: {{ card_ratio }};">
+          {%- if media -%}
+            {{
+              media.preview_image
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'lazy',
+                widths: '360, 540, 720, 960, 1200, 1600',
+                sizes: card_sizes,
+                alt: card_alt,
+                class: 'card__image'
+            }}
+            {%- if second -%}
+              {{
+                second.preview_image
+                | image_url: width: 1600
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '360, 540, 720, 960, 1200, 1600',
+                  sizes: card_sizes,
+                  alt: '',
+                  class: 'card__image card__image--secondary'
+              }}
+            {%- endif -%}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="card__info">
+        {%- if settings.card_show_vendor -%}
+          <span class="muted">{{ product.vendor | escape }}</span>
+        {%- endif -%}
+        <span class="card__title">{{ product.title | escape }}</span>
+        {%- render 'price', product: product, show_sold: true -%}
+      </div>
+    </a>
+  {%- else -%}
+    <div class="card__media">
+      <div class="media" style="--ratio: {{ card_ratio }};">
+        {{ placeholder_name | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    </div>
+    <div class="card__info">
+      <span class="card__title">{{ 'products.product.placeholder_title' | t }}</span>
+      <span class="price">{{ 25100 | money }}</span>
+    </div>
+  {%- endif -%}
+</div>

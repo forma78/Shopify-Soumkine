@@ -1,0 +1,30 @@
+{%- comment -%}
+  The artist's signature. Falls back to the vector signature from the logo (snippets/logo-sprite).
+  Accepts: class (string), loading (string, for an uploaded image)
+{%- endcomment -%}
+{%- liquid
+  assign signature_alt = settings.signature_alt | default: 'Theo Sumkin'
+  assign signature_loading = loading | default: 'lazy'
+-%}
+{%- if settings.signature_image != blank -%}
+  {{
+    settings.signature_image
+    | image_url: width: 1200
+    | image_tag:
+      class: class,
+      alt: signature_alt,
+      loading: signature_loading,
+      widths: '200, 400, 800, 1200',
+      sizes: '(min-width: 750px) 30vw, 50vw'
+  }}
+{%- else -%}
+  <svg
+    class="signature-svg{% if class %} {{ class }}{% endif %}"
+    viewBox="0 536.75 3294.3 780.48"
+    role="img"
+    aria-label="{{ signature_alt | escape }}"
+    focusable="false"
+  >
+    <use href="#soumkine-signature"/>
+  </svg>
+{%- endif -%}

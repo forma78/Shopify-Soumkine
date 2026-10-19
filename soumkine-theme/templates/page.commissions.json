@@ -1,0 +1,241 @@
+{
+  "sections": {
+    "intro": {
+      "type": "commission-intro",
+      "blocks": {
+        "format_120": {
+          "type": "format",
+          "settings": {
+            "size_cm": 120,
+            "label": "120 × 120 cm / 47 × 47 in"
+          }
+        },
+        "format_160": {
+          "type": "format",
+          "settings": {
+            "size_cm": 160,
+            "label": "160 × 160 cm / 63 × 63 in"
+          }
+        },
+        "format_200": {
+          "type": "format",
+          "settings": {
+            "size_cm": 200,
+            "label": "200 × 200 cm / 79 × 79 in"
+          }
+        },
+        "link_hotels": {
+          "type": "space_link",
+          "settings": {
+            "label": "Bespoke for Hotels",
+            "anchor": "bespoke-for-hotels"
+          }
+        },
+        "link_restaurants": {
+          "type": "space_link",
+          "settings": {
+            "label": "Bespoke for Restaurants",
+            "anchor": "bespoke-for-restaurants"
+          }
+        },
+        "link_private": {
+          "type": "space_link",
+          "settings": {
+            "label": "Bespoke for Private Collections",
+            "anchor": "bespoke-for-private-collections"
+          }
+        }
+      },
+      "block_order": [
+        "format_120",
+        "format_160",
+        "format_200",
+        "link_hotels",
+        "link_restaurants",
+        "link_private"
+      ],
+      "settings": {
+        "eyebrow": "Open for commissions",
+        "heading": "Original Art for Spaces",
+        "text": "<p>We are open for commissions for hotels, restaurants and private collections.</p><p>No posters. No prints. Every Soumkine is a unique original — signed, dated, one of one.</p>",
+        "statement": "Need 30 unique paintings for 30 rooms in one language? We do that.",
+        "formats_label": "Available formats for projects",
+        "show_custom": true,
+        "custom_label": "Custom",
+        "nav_label": "Choose your space:"
+      }
+    },
+    "hotels": {
+      "type": "commission-space",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "title": "For 10, 50 or 100+ rooms",
+            "text": "Each room gets its own original. No duplicates."
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Palette matched to your interior",
+            "text": "We work from your moodboard, Pantone or brand book."
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "title": "Large statement formats",
+            "text": "120 × 120 cm (47″), 160 × 160 cm (63″), 200 × 200 cm (79″)."
+          }
+        },
+        "feature_4": {
+          "type": "feature",
+          "settings": {
+            "title": "On time for your fit-out",
+            "text": "Palette proposal in 48h, production schedule you can actually plan around."
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3",
+        "feature_4"
+      ],
+      "settings": {
+        "anchor": "bespoke-for-hotels",
+        "number": "01",
+        "eyebrow": "Bespoke for Hotels",
+        "heading": "Art that makes guests stay longer.",
+        "text": "<p>We create series for rooms, corridors and lobbies. Every piece is unique, but they share one visual language — so the hotel feels coherent, not decorated.</p>",
+        "image_position": "left",
+        "note_signature": true,
+        "cta_label": "Request a hotel proposal",
+        "cta_target": "enquire",
+        "cta_project": "Hotel",
+        "note": "<p>I know your side: before painting full-time, I spent 9 years leading marketing and development for a group of Paris hotels. I know what a guest photographs first.</p>",
+        "image_label": "Concept — AI-generated image",
+        "image_label_short": "AI-gen image"
+      }
+    },
+    "restaurants": {
+      "type": "commission-space",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "title": "One wall, one language",
+            "text": "From a single large 160 × 160 cm (63″) piece to a series for multiple dining rooms."
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Custom palette",
+            "text": "We match your wood, textiles, brand colors. The painting looks like it was always there."
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "title": "Originals only",
+            "text": "Thick acrylic texture, signed, one of one. Guests feel the difference between art and a print."
+          }
+        },
+        "feature_4": {
+          "type": "feature",
+          "settings": {
+            "title": "Made in our Paris / Brussels atelier",
+            "text": "Shipped worldwide, ready to hang."
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3",
+        "feature_4"
+      ],
+      "settings": {
+        "anchor": "bespoke-for-restaurants",
+        "number": "02",
+        "eyebrow": "Bespoke for Restaurants",
+        "heading": "The wall your guests will Instagram before the menu.",
+        "text": "<p>A restaurant needs atmosphere, not decoration. We paint originals that set the tone — warm, calm or electric — and match your brand palette exactly.</p>",
+        "image_position": "right",
+        "note_signature": true,
+        "cta_label": "Get a palette for your restaurant",
+        "cta_target": "enquire",
+        "cta_project": "Restaurant",
+        "image_label": "Concept — AI-generated image",
+        "image_label_short": "AI-gen image"
+      }
+    },
+    "private": {
+      "type": "commission-space",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "title": "Commission your palette",
+            "text": "Tell us your wall, light and mood — we propose 3 palettes."
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Statement formats",
+            "text": "120 × 120 cm (47″), 160 × 160 cm (63″), 200 × 200 cm (79″) — the scale that makes a living room."
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "title": "Signed, dated, unique",
+            "text": "No posters, no prints, no second edition. Ever."
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3"
+      ],
+      "settings": {
+        "anchor": "bespoke-for-private-collections",
+        "number": "03",
+        "eyebrow": "Bespoke for Private Collections",
+        "heading": "One wall. One original. One of one.",
+        "text": "<p>For collectors and private homes. We create a single statement piece for your space — painted to your interior, but still 100% Soumkine.</p>",
+        "image_position": "left",
+        "note_signature": true,
+        "cta_label": "Commission your piece",
+        "cta_target": "enquire",
+        "cta_project": "Private collection",
+        "note": "<p>I work in tandem with the machine: I design the composition and lay the paint; the machine carries the brush. That’s how you get a large, precise original without waiting 6 months.</p>",
+        "image_label": "Concept — AI-generated image",
+        "image_label_short": "AI-gen image"
+      }
+    },
+    "enquire": {
+      "type": "commission-form",
+      "settings": {
+        "anchor": "enquire",
+        "heading": "Start a commission",
+        "text": "<p>Tell us about your space: walls, light, palette, timeline. We’ll come back with a proposal.</p>",
+        "projects": "Hotel, Restaurant, Private collection, Other",
+        "formats": "120 × 120 cm / 47 × 47 in, 160 × 160 cm / 63 × 63 in, 200 × 200 cm / 79 × 79 in, Custom, Not sure yet",
+        "button_label": "Send enquiry",
+        "success_text": "Thank you. We’ll be in touch shortly."
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "hotels",
+    "restaurants",
+    "private",
+    "enquire"
+  ]
+}

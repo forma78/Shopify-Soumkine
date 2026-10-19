@@ -1,0 +1,63 @@
+{%- paginate blog.articles by 12 -%}
+  <div class="page-width">
+    <header class="collection-header">
+      <h1 class="h1">{{ blog.title | escape }}</h1>
+    </header>
+    <div class="collection-layout">
+      <aside class="collection-sidebar">
+        {%- if blog.all_tags.size > 0 -%}
+          <ul class="collection-sidebar__links" role="list">
+            <li><a class="link-hover" href="{{ blog.url }}"{% if current_tags == blank %} aria-current="page"{% endif %}>{{ 'blogs.all' | t }}</a></li>
+            {%- for tag in blog.all_tags -%}
+              <li>
+                <a class="link-hover" href="{{ blog.url }}/tagged/{{ tag | handle }}"{% if current_tags contains tag %} aria-current="page"{% endif %}>
+                  {{- tag | escape -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </aside>
+      <div>
+        <div class="scatter scatter--compact">
+          <div class="scatter__grid">
+            {%- for column in (1..2) -%}
+              <div class="scatter__col scatter__col--{% if column == 1 %}left{% else %}right{% endif %} scatter__col--articles">
+                {%- for article in blog.articles -%}
+                  {%- assign side = forloop.index | modulo: 2 -%}
+                  {%- if column == 1 and side == 0 -%}{%- continue -%}{%- endif -%}
+                  {%- if column == 2 and side == 1 -%}{%- continue -%}{%- endif -%}
+                  <div class="scatter__item reveal">
+                    {%- render 'article-card',
+                      article: article,
+                      ratio: article.image.aspect_ratio,
+                      sizes: '(min-width: 990px) 34vw, 50vw',
+                      show_date: section.settings.show_date
+                    -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- render 'pagination', paginate: paginate -%}
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Blog",
+  "tag": "section",
+  "class": "section-main-blog",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

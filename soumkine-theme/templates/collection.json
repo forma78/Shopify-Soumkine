@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "show_description": true,
+        "show_count": false,
+        "layout": "scatter",
+        "ratio": "natural",
+        "per_page": 16,
+        "parallax": true,
+        "enable_filtering": true,
+        "enable_sorting": true
+      }
+    }
+  },
+  "order": ["main"]
+}

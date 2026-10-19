@@ -1,0 +1,79 @@
+<div class="section{% if section.settings.spacing == 'small' %} section--tight{% elsif section.settings.spacing == 'none' %} section--flush{% endif %}{% if section.settings.inverse %} color-inverse section--inverse{% endif %}">
+  <div class="page-width statement-wrap text-{{ section.settings.alignment }} reveal">
+    <div class="statement statement--{{ section.settings.size }}">
+      {{ section.settings.text }}
+    </div>
+    {%- if section.settings.button_label != blank -%}
+      <a class="button" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label | escape }}</a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Statement",
+  "tag": "section",
+  "class": "section-statement",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Original paintings on canvas, made in a small Paris atelier. I choose every colour, I lay the paint by hand. The machine holds the brush.</p>"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "inverse",
+      "label": "Inverse colors",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space above",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "default", "label": "Default" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Statement"
+    }
+  ]
+}
+{% endschema %}

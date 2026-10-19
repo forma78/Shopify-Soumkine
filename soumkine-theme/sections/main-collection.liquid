@@ -1,0 +1,167 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign show_facets = false
+  if section.settings.enable_filtering or section.settings.enable_sorting
+    assign show_facets = true
+  endif
+-%}
+{%- paginate collection.products by section.settings.per_page -%}
+  <div class="page-width">
+    <header class="collection-header">
+      <h1 class="h1">{{ collection.title | escape }}</h1>
+      {%- if section.settings.show_description and collection.description != blank -%}
+        <div class="rte collection-header__description">{{ collection.description }}</div>
+      {%- endif -%}
+    </header>
+
+    <div class="collection-layout">
+      <aside class="collection-sidebar">
+        {%- if menu.links.size > 0 -%}
+          <nav aria-label="{{ 'collections.navigation' | t }}">
+            <ul class="collection-sidebar__links" role="list">
+              {%- for link in menu.links -%}
+                <li>
+                  <a class="link-hover" href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+        {%- if show_facets -%}
+          <button class="filter-toggle link-hover" type="button" data-drawer-open="FacetsDrawer" aria-controls="FacetsDrawer" aria-expanded="false">
+            {%- render 'icon', name: 'filter' -%}
+            {{ 'collections.filter_and_sort' | t }}
+          </button>
+        {%- endif -%}
+        {%- if section.settings.show_count -%}
+          <p class="muted">{{ 'collections.product_count' | t: count: collection.products_count }}</p>
+        {%- endif -%}
+      </aside>
+
+      <div class="collection-results">
+        {%- if collection.products.size > 0 -%}
+          {%- if section.settings.layout == 'grid' -%}
+            <div class="product-grid">
+              {%- for product in collection.products -%}
+                <div class="reveal">
+                  {%- render 'product-card',
+                    product: product,
+                    ratio: section.settings.ratio,
+                    sizes: '(min-width: 990px) 26vw, 50vw'
+                  -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <div class="scatter scatter--compact">
+              {%- render 'scatter-products',
+                products: collection.products,
+                limit: section.settings.per_page,
+                ratio: section.settings.ratio,
+                parallax: section.settings.parallax
+              -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="collection-empty">
+            <p>{{ 'collections.empty' | t }}</p>
+            {%- if collection.filters.size > 0 -%}
+              <p style="margin-top: 16px;"><a class="button" href="{{ collection.url }}">{{ 'collections.clear' | t }}</a></p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- render 'pagination', paginate: paginate -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if show_facets -%}
+    {%- render 'facets-drawer',
+      results: collection,
+      results_url: collection.url,
+      enable_filtering: section.settings.enable_filtering,
+      enable_sorting: section.settings.enable_sorting
+    -%}
+  {%- endif -%}
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "class": "section-main-collection",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Sidebar links",
+      "info": "Links to other collections, shown beside the products."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product count",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "scatter", "label": "Scattered" },
+        { "value": "grid", "label": "Grid" }
+      ],
+      "default": "scatter"
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "natural", "label": "Original" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "parallax",
+      "label": "Parallax",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Filter and sort"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "info": "Set up filters in the Search & Discovery app.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

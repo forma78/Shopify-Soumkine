@@ -1,0 +1,41 @@
+{%- comment -%}
+  Accepts: collection (object), image (image, optional override), title (string, optional override),
+  parallax (number), sizes (string), placeholder_index (number)
+{%- endcomment -%}
+{%- liquid
+  assign card_image = image | default: collection.featured_image
+  if card_image == blank and collection.products.size > 0
+    assign card_image = collection.products.first.featured_media.preview_image
+  endif
+  assign card_title = title | default: collection.title
+  assign card_ratio = 0.75
+  if card_image
+    assign card_ratio = card_image.aspect_ratio
+  endif
+  assign placeholder_number = placeholder_index | default: 1
+  assign placeholder_name = 'collection-' | append: placeholder_number
+-%}
+<div class="card card--overlay"{% if parallax %} data-parallax="{{ parallax }}"{% endif %}>
+  <a href="{{ collection.url | default: routes.collections_url }}">
+    <div class="card__media">
+      <div class="media" style="--ratio: {{ card_ratio }};">
+        {%- if card_image -%}
+          {{
+            card_image
+            | image_url: width: 1600
+            | image_tag:
+              loading: 'lazy',
+              widths: '360, 540, 720, 960, 1200, 1600',
+              sizes: sizes,
+              alt: card_title
+          }}
+        {%- else -%}
+          {{ placeholder_name | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+      <div class="card__overlay">
+        <span class="card__overlay-title">{{ card_title | default: 'Collection' | escape }}</span>
+      </div>
+    </div>
+  </a>
+</div>

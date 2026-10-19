@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "show_subject": true,
+        "subjects": "A work in the shop, A commission, For spaces & interiors, Press, Something else"
+      }
+    }
+  },
+  "order": ["form"]
+}

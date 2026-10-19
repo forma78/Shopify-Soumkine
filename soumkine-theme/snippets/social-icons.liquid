@@ -1,0 +1,29 @@
+{%- liquid
+  assign networks = 'instagram,tiktok,pinterest,youtube,facebook' | split: ','
+-%}
+<ul class="footer__social" role="list">
+  {%- for network in networks -%}
+    {%- liquid
+      case network
+        when 'instagram'
+          assign link = settings.social_instagram_link
+        when 'tiktok'
+          assign link = settings.social_tiktok_link
+        when 'pinterest'
+          assign link = settings.social_pinterest_link
+        when 'youtube'
+          assign link = settings.social_youtube_link
+        when 'facebook'
+          assign link = settings.social_facebook_link
+      endcase
+    -%}
+    {%- if link != blank -%}
+      <li>
+        <a href="{{ link }}" target="_blank" rel="noopener">
+          {%- render 'icon', name: network -%}
+          <span class="visually-hidden">{{ network | capitalize }}</span>
+        </a>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>

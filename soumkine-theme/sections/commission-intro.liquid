@@ -1,0 +1,191 @@
+{%- comment -%}
+  Opening of the commissions landing page: headline, pitch, formats drawn to scale,
+  and "Choose your space" links that scroll to the matching commission sections.
+{%- endcomment -%}
+{%- liquid
+  assign largest = 1
+  for block in section.blocks
+    if block.type == 'format' and block.settings.size_cm > largest
+      assign largest = block.settings.size_cm
+    endif
+  endfor
+-%}
+<div class="section section--tight commission-intro">
+  <div class="page-width">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="commission-intro__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h1 class="h-display commission-intro__title">{{ section.settings.heading | escape }}</h1>
+
+    <div class="commission-intro__grid">
+      <div class="commission-intro__text">
+        {%- if section.settings.text != blank -%}
+          <div class="rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.statement != blank -%}
+          <p class="commission-intro__statement">{{ section.settings.statement | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <figure class="formats">
+        {%- if section.settings.formats_label != blank -%}
+          <figcaption class="formats__label">{{ section.settings.formats_label | escape }}</figcaption>
+        {%- endif -%}
+        <ul class="formats__row" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'format' -%}
+              {%- assign share = block.settings.size_cm | times: 100.0 | divided_by: largest -%}
+              <li class="formats__item" style="--share: {{ share }};" {{ block.shopify_attributes }}>
+                <span class="formats__square" aria-hidden="true"></span>
+                <span class="formats__name">{{ block.settings.label | escape | replace: ' / ', '<br>' }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if section.settings.show_custom -%}
+            <li class="formats__item formats__item--custom" style="--share: 70;">
+              <span class="formats__square" aria-hidden="true"></span>
+              <span class="formats__name">{{ section.settings.custom_label | escape }}</span>
+            </li>
+          {%- endif -%}
+        </ul>
+      </figure>
+    </div>
+
+    <nav class="commission-nav" aria-label="{{ section.settings.nav_label | escape }}">
+      {%- if section.settings.nav_label != blank -%}
+        <p class="commission-nav__label">{{ section.settings.nav_label | escape }}</p>
+      {%- endif -%}
+      <ul class="commission-nav__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'space_link' -%}
+            <li {{ block.shopify_attributes }}>
+              <a class="button button--large commission-nav__link" href="#{{ block.settings.anchor | handle }}">
+                {{- block.settings.label | escape -}}
+                {%- render 'icon', name: 'arrow-right', class: 'commission-nav__arrow' -%}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Commissions intro",
+  "tag": "section",
+  "class": "section-commission-intro",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small text",
+      "default": "Open for commissions"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Original Art for Spaces"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We are open for commissions for hotels, restaurants and private collections.</p>"
+    },
+    {
+      "type": "text",
+      "id": "statement",
+      "label": "Statement",
+      "default": "Need 30 unique paintings for 30 rooms in one language? We do that."
+    },
+    {
+      "type": "header",
+      "content": "Formats"
+    },
+    {
+      "type": "text",
+      "id": "formats_label",
+      "label": "Label",
+      "default": "Available formats for projects"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_custom",
+      "label": "Show custom format",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_label",
+      "label": "Custom format label",
+      "default": "Custom"
+    },
+    {
+      "type": "header",
+      "content": "Choose your space"
+    },
+    {
+      "type": "text",
+      "id": "nav_label",
+      "label": "Label",
+      "default": "Choose your space:"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "format",
+      "name": "Format",
+      "settings": [
+        {
+          "type": "number",
+          "id": "size_cm",
+          "label": "Side in cm",
+          "info": "Squares are drawn to scale against the largest format. A ' / ' in the label starts a new line.",
+          "default": 120
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "120 × 120 cm / 47 × 47 in"
+        }
+      ]
+    },
+    {
+      "type": "space_link",
+      "name": "Space link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Bespoke for Hotels"
+        },
+        {
+          "type": "text",
+          "id": "anchor",
+          "label": "Section anchor",
+          "info": "The anchor set on a Commission section of this page, e.g. bespoke-for-hotels.",
+          "default": "bespoke-for-hotels"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Commissions intro",
+      "blocks": [
+        { "type": "format", "settings": { "size_cm": 120, "label": "120 × 120 cm / 47 × 47 in" } },
+        { "type": "format", "settings": { "size_cm": 160, "label": "160 × 160 cm / 63 × 63 in" } },
+        { "type": "format", "settings": { "size_cm": 200, "label": "200 × 200 cm / 79 × 79 in" } },
+        { "type": "space_link", "settings": { "label": "Bespoke for Hotels", "anchor": "bespoke-for-hotels" } },
+        { "type": "space_link", "settings": { "label": "Bespoke for Restaurants", "anchor": "bespoke-for-restaurants" } },
+        { "type": "space_link", "settings": { "label": "Bespoke for Private Collections", "anchor": "bespoke-for-private-collections" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

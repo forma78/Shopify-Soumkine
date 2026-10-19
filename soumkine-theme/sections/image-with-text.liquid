@@ -1,0 +1,132 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_product = section.settings.product
+  if image == blank and image_product == blank
+    assign image_product = collections.all.products.first
+  endif
+  if image == blank and image_product != blank
+    assign image = image_product.featured_media.preview_image
+    if image_product.media.size > 1
+      assign image = image_product.media[1].preview_image
+    endif
+  endif
+  case section.settings.image_ratio
+    when 'portrait'
+      assign image_ratio = 0.8
+    when 'square'
+      assign image_ratio = 1
+    when 'natural'
+      assign image_ratio = 1.5
+      if image
+        assign image_ratio = image.aspect_ratio
+      endif
+    else
+      assign image_ratio = 1.5
+  endcase
+-%}
+<div class="section{% if section.settings.spacing == 'small' %} section--tight{% endif %}">
+  <div class="page-width section-split">
+    <div class="section-split__aside section-split__aside--sticky story__text reveal">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="h3">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.show_signature -%}
+        {%- render 'signature', class: 'signature-img story__signature' -%}
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a class="button" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+    <div class="story__media media reveal" style="--ratio: {{ image_ratio }};">
+      {%- if image -%}
+        {{
+          image
+          | image_url: width: 2400
+          | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600, 2000, 2400', sizes: '(min-width: 990px) 70vw, 100vw'
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "section",
+  "class": "section-image-with-text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Or use a product image",
+      "info": "The second image of the first product is used when both are empty."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "landscape", "label": "Landscape" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" },
+        { "value": "natural", "label": "Original" }
+      ],
+      "default": "landscape"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The atelier"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Founded in Paris, 2016. A painting machine, built by hand, guided by hand.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_signature",
+      "label": "Show signature",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "About"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space above",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "default", "label": "Default" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text"
+    }
+  ]
+}
+{% endschema %}

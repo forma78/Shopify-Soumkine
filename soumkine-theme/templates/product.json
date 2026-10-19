@@ -1,0 +1,76 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": { "type": "title" },
+        "price": { "type": "price", "settings": { "show_tax_note": false } },
+        "variant_picker": { "type": "variant_picker" },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "enquire_label": "Enquire about a similar work",
+            "enquire_link": "/pages/contact"
+          }
+        },
+        "description": { "type": "description" },
+        "details": {
+          "type": "artwork_details",
+          "settings": {
+            "medium": "Acrylic on canvas",
+            "dimensions": "",
+            "year": "",
+            "edition": "Original, one of a kind"
+          }
+        },
+        "icons": {
+          "type": "icon_list",
+          "settings": {
+            "icon_1": "brush",
+            "text_1": "Painted in Paris",
+            "icon_2": "certificate",
+            "text_2": "Signed, with certificate",
+            "icon_3": "globe",
+            "text_3": "Ships worldwide",
+            "icon_4": "frame",
+            "text_4": ""
+          }
+        },
+        "tab_shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping",
+            "icon": "truck",
+            "content": "<p>Each painting is wrapped by hand and shipped insured from Paris.</p>",
+            "open": false
+          }
+        },
+        "tab_care": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Care",
+            "icon": "brush",
+            "content": "<p>Keep away from direct sunlight and humidity. Dust gently with a soft, dry brush.</p>",
+            "open": false
+          }
+        },
+        "signature": { "type": "signature", "settings": { "text": "Signed by the artist" } }
+      },
+      "block_order": ["title", "price", "variant_picker", "buy_buttons", "description", "details", "icons", "tab_shipping", "tab_care", "signature"],
+      "settings": {
+        "gallery_ratio": "natural",
+        "scatter_media": true
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "You may also like",
+        "limit": 6,
+        "ratio": "portrait"
+      }
+    }
+  },
+  "order": ["main", "recommendations"]
+}

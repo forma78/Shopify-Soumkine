@@ -1,0 +1,14 @@
+<div class="not-found">
+  <p>{{ 'templates.404.subtext' | t }}</p>
+  <h1 class="h-display">{{ 'templates.404.title' | t }}</h1>
+  <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}</a>
+</div>
+
+{% schema %}
+{
+  "name": "404",
+  "tag": "section",
+  "class": "section-404",
+  "settings": []
+}
+{% endschema %}

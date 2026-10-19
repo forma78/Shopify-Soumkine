@@ -1,0 +1,19 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "nav_position": "left",
+        "show_search": true,
+        "show_account": false,
+        "sticky": "auto",
+        "drawer_menu": "footer",
+        "drawer_signature": true
+      }
+    }
+  },
+  "order": ["header"]
+}

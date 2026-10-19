@@ -1,0 +1,45 @@
+{%- comment -%}
+  Large wordmark across the page width, with the artist's signature.
+  Accepts:
+  - tag (string): wrapping element, default 'div'
+  - show_signature (boolean)
+  - signature_position (string): 'overlap' | 'under' | 'stacked'
+  - class (string)
+{%- endcomment -%}
+{%- liquid
+  assign lockup_tag = tag | default: 'div'
+  assign wordmark = settings.wordmark_text | default: shop.name
+  assign use_logo = false
+  if settings.wordmark_style == 'logo'
+    assign use_logo = true
+  endif
+  assign position = signature_position | default: 'overlap'
+  if show_signature != true
+    assign position = 'overlap'
+  endif
+  assign full_logo = false
+  if use_logo and position == 'stacked' and settings.signature_image == blank
+    assign full_logo = true
+  endif
+-%}
+<{{ lockup_tag }} class="lockup lockup--{{ position }}{% if class %} {{ class }}{% endif %}">
+  {%- if full_logo -%}
+    {%- render 'logo-lockup', class: 'lockup__full', label: 'SOUMKINE by Theo Sumkin' -%}
+  {%- else -%}
+    {%- if use_logo -%}
+      {%- render 'logo-wordmark', class: 'lockup__logo', label: 'SOUMKINE' -%}
+    {%- else -%}
+      <fit-text class="fit-text" aria-label="{{ wordmark | escape }}"><span class="fit-text__inner" aria-hidden="true">{{ wordmark | escape }}</span></fit-text>
+    {%- endif -%}
+    {%- if show_signature -%}
+      <span class="lockup__signature">
+        {%- if use_logo -%}
+          {%- render 'logo-by', class: 'lockup__by' -%}
+        {%- elsif settings.signature_prefix != blank -%}
+          <span class="lockup__signature-prefix mono">{{ settings.signature_prefix | escape }}</span>
+        {%- endif -%}
+        {%- render 'signature', class: 'signature-img' -%}
+      </span>
+    {%- endif -%}
+  {%- endif -%}
+</{{ lockup_tag }}>

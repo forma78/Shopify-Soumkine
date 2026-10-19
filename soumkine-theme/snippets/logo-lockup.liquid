@@ -1,0 +1,14 @@
+{%- comment -%}
+  The full logo, composed exactly as the master: SOUMKINE / by / signature.
+  Accepts: class (string), label (string, accessible name; decorative when empty)
+{%- endcomment -%}
+<svg
+  class="logo-svg{% if class %} {{ class }}{% endif %}"
+  viewBox="0 0 3294.3 1317.22"
+  {% if label != blank %}role="img" aria-label="{{ label | escape }}"{% else %}aria-hidden="true"{% endif %}
+  focusable="false"
+>
+  <use href="#soumkine-wordmark"/>
+  <use href="#soumkine-by"/>
+  <use href="#soumkine-signature"/>
+</svg>

@@ -1,0 +1,59 @@
+<cart-items data-section-id="{{ section.id }}" data-cart-count-value="{{ cart.item_count }}">
+  <div class="page-width">
+    <header class="collection-header">
+      <h1 class="h1">{{ 'cart.title' | t }}</h1>
+    </header>
+
+    {%- if cart.item_count > 0 -%}
+      <div class="cart-page">
+        <form action="{{ routes.cart_url }}" method="post" id="CartForm" class="cart-items">
+          {%- for item in cart.items -%}
+            {%- render 'cart-line', item: item, index: forloop.index -%}
+          {%- endfor -%}
+          <noscript><button class="button" type="submit" name="update">{{ 'cart.update' | t }}</button></noscript>
+          <p class="form-message form-message--error" data-cart-error role="alert" hidden></p>
+        </form>
+
+        <aside class="cart-page__summary">
+          {%- for discount in cart.cart_level_discount_applications -%}
+            <div class="cart-summary__row">
+              <span>{{ discount.title | escape }}</span>
+              <span>-{{ discount.total_allocated_amount | money }}</span>
+            </div>
+          {%- endfor -%}
+          <div class="cart-summary__row">
+            <span>{{ 'cart.subtotal' | t }}</span>
+            <span>{{ cart.total_price | money_with_currency }}</span>
+          </div>
+          <p class="cart-summary__note small">{{ 'cart.taxes_and_shipping' | t }}</p>
+          {%- if settings.cart_note -%}
+            <div class="field" style="margin-bottom: 16px;">
+              <label class="field__label" for="CartNote">{{ 'cart.note' | t }}</label>
+              <textarea id="CartNote" class="textarea" name="note" form="CartForm">{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+          <div class="cart-summary__buttons">
+            <button class="button button--primary button--full" type="submit" name="checkout" form="CartForm">{{ 'cart.checkout' | t }}</button>
+            {%- if additional_checkout_buttons -%}
+              <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
+            {%- endif -%}
+          </div>
+        </aside>
+      </div>
+    {%- else -%}
+      <div class="cart-empty">
+        <p>{{ 'cart.empty' | t }}</p>
+        <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</cart-items>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "class": "section-main-cart",
+  "settings": []
+}
+{% endschema %}

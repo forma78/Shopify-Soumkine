@@ -1,0 +1,73 @@
+{%- assign recommendations_url = routes.product_recommendations_url | append: '?section_id=' | append: section.id | append: '&product_id=' | append: product.id | append: '&limit=' | append: section.settings.limit -%}
+<div class="section">
+  <product-recommendations class="page-width section-split" data-url="{{ recommendations_url }}">
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      <div class="section-split__aside reveal">
+        <h2 class="h3">{{ section.settings.heading | escape }}</h2>
+      </div>
+      <slider-component class="reveal">
+        <div class="slider" data-slider-track>
+          {%- for recommendation in recommendations.products -%}
+            {%- render 'product-card',
+              product: recommendation,
+              ratio: section.settings.ratio,
+              sizes: '(min-width: 990px) 27vw, (min-width: 750px) 38vw, 72vw'
+            -%}
+          {%- endfor -%}
+        </div>
+        <div class="slider-controls">
+          <button type="button" data-slider-prev aria-label="{{ 'general.slider.previous' | t }}">
+            {%- render 'icon', name: 'arrow-left' -%}
+          </button>
+          <button type="button" data-slider-next aria-label="{{ 'general.slider.next' | t }}">
+            {%- render 'icon', name: 'arrow-right' -%}
+          </button>
+        </div>
+      </slider-component>
+    {%- endif -%}
+  </product-recommendations>
+</div>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "section",
+  "class": "section-recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Number of products",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" },
+        { "value": "natural", "label": "Original" }
+      ],
+      "default": "portrait"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product recommendations"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- comment -%}
+  Accepts:
+  - product (object)
+  - variant (object, optional): uses selected or first available variant when blank
+  - show_sold (boolean): mark sold works with the red dot (and hide their price, per theme settings)
+{%- endcomment -%}
+{%- liquid
+  if variant == blank
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = variant
+  endif
+  assign price = target.price
+  assign compare = target.compare_at_price
+  if settings.currency_code_enabled
+    assign price_html = price | money_with_currency
+    assign compare_html = compare | money_with_currency
+  else
+    assign price_html = price | money
+    assign compare_html = compare | money
+  endif
+  if variant == blank and product.price_varies
+    assign price_html = 'products.product.price.from_price_html' | t: price: price_html
+  endif
+-%}
+{%- liquid
+  assign is_sold = false
+  if show_sold and target.available == false
+    assign is_sold = true
+  endif
+-%}
+<span class="price{% if is_sold %} price--sold{% endif %}">
+  {%- unless is_sold and settings.sold_hide_price -%}
+    {%- if compare > price -%}
+      <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+      <span class="price__current">{{ price_html }}</span>
+      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+      <s class="price__compare">{{ compare_html }}</s>
+    {%- else -%}
+      <span class="price__current">{{ price_html }}</span>
+    {%- endif -%}
+  {%- endunless -%}
+  {%- if is_sold -%}
+    <span class="price__sold"><span class="sold-dot" aria-hidden="true"></span>{{ settings.sold_out_label | default: 'Sold' | escape }}</span>
+  {%- endif -%}
+</span>

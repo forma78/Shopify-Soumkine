@@ -1,0 +1,78 @@
+{%- paginate search.results by 24 -%}
+  <div class="page-width">
+    <header class="collection-header">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-drawer__form">
+        <label class="visually-hidden" for="SearchPageInput">{{ 'search.placeholder' | t }}</label>
+        <input
+          id="SearchPageInput"
+          class="search-drawer__input"
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="{{ 'search.placeholder' | t }}"
+        >
+        <input type="hidden" name="options[prefix]" value="last">
+        <button class="icon-button" type="submit" aria-label="{{ 'search.submit' | t }}">
+          {%- render 'icon', name: 'arrow-right', class: 'icon--large' -%}
+        </button>
+      </form>
+      {%- if search.performed -%}
+        <p class="muted" style="margin-top: 14px;">
+          {{- 'search.results_count' | t: count: search.results_count, terms: search.terms -}}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- if search.performed -%}
+      <div class="collection-layout">
+        <aside class="collection-sidebar">
+          {%- if search.filters.size > 0 or search.sort_options.size > 0 -%}
+            <button class="filter-toggle link-hover" type="button" data-drawer-open="FacetsDrawer" aria-controls="FacetsDrawer" aria-expanded="false">
+              {%- render 'icon', name: 'filter' -%}
+              {{ 'collections.filter_and_sort' | t }}
+            </button>
+          {%- endif -%}
+        </aside>
+        <div>
+          {%- if search.results_count > 0 -%}
+            <div class="product-grid">
+              {%- for item in search.results -%}
+                <div class="reveal">
+                  {%- case item.object_type -%}
+                    {%- when 'product' -%}
+                      {%- render 'product-card', product: item, ratio: 'portrait', sizes: '(min-width: 990px) 26vw, 50vw' -%}
+                    {%- when 'article' -%}
+                      {%- render 'article-card', article: item, ratio: 0.75, sizes: '(min-width: 990px) 26vw, 50vw' -%}
+                    {%- when 'page' -%}
+                      <a class="card" href="{{ item.url }}">
+                        <span class="media" style="aspect-ratio: 0.75; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                          <span class="h4">{{ item.title | escape }}</span>
+                        </span>
+                        <span class="card__info">{{ 'search.page' | t }}</span>
+                      </a>
+                  {%- endcase -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <p>{{ 'search.no_results' | t: terms: search.terms }}</p>
+          {%- endif -%}
+          {%- render 'pagination', paginate: paginate -%}
+        </div>
+      </div>
+
+      {%- if search.filters.size > 0 or search.sort_options.size > 0 -%}
+        {%- render 'facets-drawer', results: search, results_url: routes.search_url, enable_filtering: true, enable_sorting: true -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "class": "section-main-search",
+  "settings": []
+}
+{% endschema %}
