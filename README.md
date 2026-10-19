@@ -4,6 +4,8 @@ A custom Shopify theme built for **SOUMKINE**, the art brand founded by painter 
 
 **Design & development: Yury Melnikau** · Version 0.4.0 · Online Store 2.0
 
+**Live store: [soumkine.com](https://soumkine.com)** — running this theme.
+
 <p>
   <a href="soumkine-preview/1-home-desktop.jpg"><img src="soumkine-preview/1-home-desktop.jpg" width="32%" align="top" alt="Home page"></a>
   <a href="soumkine-preview/2-product.jpg"><img src="soumkine-preview/2-product.jpg" width="32%" align="top" alt="Artwork page"></a>
