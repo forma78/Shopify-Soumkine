@@ -1,6 +1,6 @@
 # Shopify-Soumkine
 
-Тема Shopify для **SOUMKINE by Theo Sumkin** — магазина оригинальных картин. Версия **0.4.0**.
+Тема Shopify для **SOUMKINE by Theo Sumkin** — магазина оригинальных картин. Версия **0.4.0**, автор темы — Yury Melnikau.
 
 ## Что где
 
